@@ -37,13 +37,13 @@ class PSI(wx.App):
                                                             u'y-size')))
         self.frame.Show()
         self.results = self.res.LoadDialog(None, u'ResultDialog')
-        self.results.SetDimensions(int(self.props.GetProperty(u'main-window',
+        self.results.SetDimensions(int(self.props.GetProperty(u'results',
                                                               u'x-position')),
-                                   int(self.props.GetProperty(u'main-window', 
+                                   int(self.props.GetProperty(u'results', 
                                                               u'y-position')),
-                                   int(self.props.GetProperty(u'main-window', 
+                                   int(self.props.GetProperty(u'results', 
                                                               u'x-size')),
-                                   int(self.props.GetProperty(u'main-window', 
+                                   int(self.props.GetProperty(u'results', 
                                                               u'y-size')))
         self.ResultText = xrc.XRCCTRL(self.results, u'ResultText')
         font = wx.Font(8, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Monospace')
@@ -57,7 +57,7 @@ class PSI(wx.App):
 
     def Close(self, e):
         print 'Closing application...'
-        self.ResultDialog.Close()
+        self.results.Close()
         self.frame.Close()
 
     def OpenFile(self, e):
