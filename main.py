@@ -26,6 +26,8 @@ class PSI(wx.App):
                         id = xrc.XRCID('LR'))
         self.frame.SetSize((600, 450))
         self.frame.Show()
+        self.ResultDialog = self.res.LoadDialog(None, 'ResultDialog')
+        self.ResultText = xrc.XRCCTRL(self.ResultDialog, 'ResultText')
         return True
 
     def PrintSelectedCells(self, e):
@@ -57,9 +59,12 @@ class PSI(wx.App):
         print 'Linear Regression:'
         analyst = Analysis.LinearRegression()
         if analyst.LoadData(self.mainGrid.GetSelectedCellsList('N')):
+            self.ResultText.Clear()
             Result = analyst.Calculate()
-            print "Y = {0:.2}*X + {1:.2}".format(Result['slope'],
-                                                 Result['intercept'])
+            summary = "Y = {0:.2}*X + {1:.2}".format(Result['slope'],
+                                                     Result['intercept'])
+            self.ResultText.AppendText(summary)
+            self.ResultDialog.Show()
 
 if __name__ == '__main__':
     app = PSI(False)
