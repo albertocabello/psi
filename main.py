@@ -10,24 +10,26 @@ import Analysis
 class PSI(wx.App):
 
     def OnInit(self):
-        self.res = xrc.XmlResource('mainGrid.xrc')
-        self.frame = self.res.LoadFrame(None, 'mainFrame')
-        self.mainGrid = xrc.XRCCTRL(self.frame, 'mainGrid')
+        self.res = xrc.XmlResource(u'mainGrid.xrc')
+        self.frame = self.res.LoadFrame(None, u'mainFrame')
+        self.mainGrid = xrc.XRCCTRL(self.frame, u'mainGrid')
         self.mainGrid.CreateGrid(1000, 26)
         self.mainGrid.EnableDragRowSize(False)
         self.mainGrid.EnableDragColSize(False)
         self.frame.Bind(wx.EVT_MENU, self.PrintSelectedCells,
-                        id = xrc.XRCID('Print'))
+                        id = xrc.XRCID(u'Print'))
         self.frame.Bind(wx.EVT_MENU, self.Close,
-                        id = xrc.XRCID('Quit'))
+                        id = xrc.XRCID(u'Quit'))
         self.frame.Bind(wx.EVT_MENU, self.OpenFile,
-                        id = xrc.XRCID('Open'))
+                        id = xrc.XRCID(u'Open'))
         self.frame.Bind(wx.EVT_MENU, self.DoLR,
-                        id = xrc.XRCID('LR'))
+                        id = xrc.XRCID(u'LR'))
         self.frame.SetSize((600, 450))
         self.frame.Show()
-        self.ResultDialog = self.res.LoadDialog(None, 'ResultDialog')
-        self.ResultText = xrc.XRCCTRL(self.ResultDialog, 'ResultText')
+        self.ResultDialog = self.res.LoadDialog(None, u'ResultDialog')
+        self.ResultText = xrc.XRCCTRL(self.ResultDialog, u'ResultText')
+        font = wx.Font(8, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Monospace')
+        self.ResultText.SetFont(font)
         return True
 
     def PrintSelectedCells(self, e):
@@ -61,9 +63,11 @@ class PSI(wx.App):
         if analyst.LoadData(self.mainGrid.GetSelectedCellsList('N')):
             self.ResultText.Clear()
             Result = analyst.Calculate()
-            summary = "Y = {0:.2}*X + {1:.2}".format(Result['slope'],
+            summary = "Y = {0:.2}*X + {1:.2}\n".format(Result['slope'],
                                                      Result['intercept'])
             self.ResultText.AppendText(summary)
+            for i in Result.keys():
+                self.ResultText.AppendText("{0}: {1}\n".format(i, Result[i]))
             self.ResultDialog.Show()
 
 if __name__ == '__main__':
