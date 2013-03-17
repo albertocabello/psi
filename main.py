@@ -5,11 +5,14 @@ from wx import xrc
 from wx import grid
 import PSIui
 import Analysis
+import Properties
 
 
 class PSI(wx.App):
 
     def OnInit(self):
+        self.props = Properties.XMLProperties()
+        self.props.Open('properties.xml')
         self.res = xrc.XmlResource(u'mainGrid.xrc')
         self.frame = self.res.LoadFrame(None, u'mainFrame')
         self.mainGrid = xrc.XRCCTRL(self.frame, u'mainGrid')
@@ -24,9 +27,17 @@ class PSI(wx.App):
                         id = xrc.XRCID(u'Open'))
         self.frame.Bind(wx.EVT_MENU, self.DoLR,
                         id = xrc.XRCID(u'LR'))
-        self.frame.SetSize((600, 450))
+        self.frame.SetDimensions(int(self.props.GetProperty(u'main-window',
+                                                            u'x-position')),
+                                 int(self.props.GetProperty(u'main-window', 
+                                                            u'y-position')),
+                                 int(self.props.GetProperty(u'main-window', 
+                                                            u'x-size')),
+                                 int(self.props.GetProperty(u'main-window', 
+                                                            u'y-size')))
         self.frame.Show()
         self.ResultDialog = self.res.LoadDialog(None, u'ResultDialog')
+        self.ResultDialog.SetSize((300, 250))
         self.ResultText = xrc.XRCCTRL(self.ResultDialog, u'ResultText')
         font = wx.Font(8, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Monospace')
         self.ResultText.SetFont(font)
@@ -39,6 +50,7 @@ class PSI(wx.App):
 
     def Close(self, e):
         print 'Closing application...'
+        self.ResultDialog.Close()
         self.frame.Close()
 
     def OpenFile(self, e):

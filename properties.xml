@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<properties>
+<component id="main-window">
+<x-size>550</x-size>
+<y-size>400</y-size>
+<x-position>50</x-position>
+<y-position>50</y-position>
+</component>
+</properties>
