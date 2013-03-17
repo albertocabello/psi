@@ -27,8 +27,6 @@ class LinearRegression:
     def Calculate(self):
         N = self.Size/2
         Res = {}
-        for i in ( 'slope', 'intercept', 'r_value', 'p_value', 'std_err'):
-            Res[i] = ''
         Res['slope'], Res['intercept'],\
         Res['r_value'], Res['p_value'], Res['std_err'] =\
         scipy.stats.linregress(numpy.array(self.Data[:N], dtype = float),
