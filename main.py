@@ -36,9 +36,16 @@ class PSI(wx.App):
                                  int(self.props.GetProperty(u'main-window', 
                                                             u'y-size')))
         self.frame.Show()
-        self.ResultDialog = self.res.LoadDialog(None, u'ResultDialog')
-        self.ResultDialog.SetSize((300, 250))
-        self.ResultText = xrc.XRCCTRL(self.ResultDialog, u'ResultText')
+        self.results = self.res.LoadDialog(None, u'ResultDialog')
+        self.results.SetDimensions(int(self.props.GetProperty(u'main-window',
+                                                              u'x-position')),
+                                   int(self.props.GetProperty(u'main-window', 
+                                                              u'y-position')),
+                                   int(self.props.GetProperty(u'main-window', 
+                                                              u'x-size')),
+                                   int(self.props.GetProperty(u'main-window', 
+                                                              u'y-size')))
+        self.ResultText = xrc.XRCCTRL(self.results, u'ResultText')
         font = wx.Font(8, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Monospace')
         self.ResultText.SetFont(font)
         return True
@@ -80,7 +87,7 @@ class PSI(wx.App):
             self.ResultText.AppendText(summary)
             for i in Result.keys():
                 self.ResultText.AppendText("{0}: {1}\n".format(i, Result[i]))
-            self.ResultDialog.Show()
+            self.results.Show()
 
 if __name__ == '__main__':
     app = PSI(False)
