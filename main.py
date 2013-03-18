@@ -46,6 +46,7 @@ class PSI(wx.App):
                                    int(self.props.GetProperty(u'results', 
                                                               u'y-size')))
         self.ResultText = xrc.XRCCTRL(self.results, u'ResultText')
+        self.ResultGraph = xrc.XRCCTRL(self.results, u'ResultGraph')
         font = wx.Font(8, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Monospace')
         self.ResultText.SetFont(font)
         return True
@@ -83,10 +84,17 @@ class PSI(wx.App):
             self.ResultText.Clear()
             Result = analyst.Calculate()
             summary = "Y = {0:.2}*X + {1:.2}\n".format(Result['slope'],
-                                                     Result['intercept'])
+                                                       Result['intercept'])
             self.ResultText.AppendText(summary)
             for i in Result.keys():
                 self.ResultText.AppendText("{0}: {1}\n".format(i, Result[i]))
+            bitmap = wx.EmptyBitmap(200, 200)
+            canvas = wx.MemoryDC(bitmap)
+            canvas.SetBrush(wx.Brush('green'))
+            canvas.SetPen(wx.Pen('red', 1))
+            canvas.Clear()
+            canvas.DrawCircle(10, 10, 10)
+            self.ResultGraph.SetBitmap(bitmap)
             self.results.Show()
 
 if __name__ == '__main__':
