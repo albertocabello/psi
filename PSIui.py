@@ -76,12 +76,15 @@ class DataGrid (wx.grid.Grid):
         return cells
 
 
-class ResultDialog (wx.Dialog):
+class ResultDialog (wx.Frame):
 
     def __init__(self, parent, properties):
         self.res = xrc.XmlResource(u'mainGrid.xrc')
-        pre = wx.PreDialog()
-        self.res.LoadOnDialog(pre, parent, u'ResultDialog')
+        # pre = wx.PreDialog()
+        # self.res.LoadOnDialog(pre, parent, u'ResultDialog')
+        # self.PostCreate(pre)
+        pre = wx.PreFrame()
+        self.res.LoadOnFrame(pre, parent, u'ResultDialog')
         self.PostCreate(pre)
         self.properties = properties
         self.SetDimensions(int(properties.GetProperty(u'results',
@@ -104,4 +107,4 @@ class ResultDialog (wx.Dialog):
         self.properties.SetProperty(u'results', u'x-size', w)
         self.properties.SetProperty(u'results', u'y-size', h)
         self.properties.Save()
-        wx.Dialog.Close(self, False)
+        wx.Frame.Close(self, False)
