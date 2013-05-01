@@ -3,12 +3,13 @@
 
 import wx
 from wx import grid
+from wx import xrc
+import Graphics
 
 
 class DataGrid (wx.grid.Grid):
 
     def __init__(self):
-        print 'Init DataGrid...'
         p = grid.PreGrid()
         self.PostCreate(p)
         self.Bind(wx.EVT_WINDOW_CREATE, self.OnCreate)
@@ -73,3 +74,26 @@ class DataGrid (wx.grid.Grid):
         except IndexError:
             None
         return cells
+
+
+class ResultDialog (wx.Dialog):
+
+    def __init__(self, parent, properties):
+        self.res = xrc.XmlResource(u'mainGrid.xrc')
+        pre = wx.PreDialog()
+        self.res.LoadOnDialog(pre, parent, u'ResultDialog')
+        self.PostCreate(pre)
+        self.SetDimensions(int(properties.GetProperty(u'results',
+                                                      u'x-position')),
+                           int(properties.GetProperty(u'results',
+                                                      u'y-position')),
+                           int(properties.GetProperty(u'results',
+                                                      u'x-size')),
+                           int(properties.GetProperty(u'results',
+                                                      u'y-size')))
+        font = wx.Font(8, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Monospace')
+        xrc.XRCCTRL(self, u'ResultText').SetFont(font)
+        xrc.XRCCTRL(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
+
+    def Close(self, event):
+        wx.Dialog.Close(self, False)

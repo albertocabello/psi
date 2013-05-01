@@ -3,9 +3,10 @@
 import wx
 from wx import xrc
 from wx import grid
-import PSIui
 import Analysis
+import Graphics
 import Properties
+import PSIui
 
 
 class PSI(wx.App):
@@ -29,26 +30,17 @@ class PSI(wx.App):
                         id = xrc.XRCID(u'LR'))
         self.frame.SetDimensions(int(self.props.GetProperty(u'main-window',
                                                             u'x-position')),
-                                 int(self.props.GetProperty(u'main-window', 
+                                 int(self.props.GetProperty(u'main-window',
                                                             u'y-position')),
-                                 int(self.props.GetProperty(u'main-window', 
+                                 int(self.props.GetProperty(u'main-window',
                                                             u'x-size')),
-                                 int(self.props.GetProperty(u'main-window', 
+                                 int(self.props.GetProperty(u'main-window',
                                                             u'y-size')))
         self.frame.Show()
-        self.results = self.res.LoadDialog(None, u'ResultDialog')
-        self.results.SetDimensions(int(self.props.GetProperty(u'results',
-                                                              u'x-position')),
-                                   int(self.props.GetProperty(u'results', 
-                                                              u'y-position')),
-                                   int(self.props.GetProperty(u'results', 
-                                                              u'x-size')),
-                                   int(self.props.GetProperty(u'results', 
-                                                              u'y-size')))
+        self.results = PSIui.ResultDialog(self.frame, self.props)
         self.ResultText = xrc.XRCCTRL(self.results, u'ResultText')
         self.ResultGraph = xrc.XRCCTRL(self.results, u'ResultGraph')
-        font = wx.Font(8, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Monospace')
-        self.ResultText.SetFont(font)
+        self.results.Show()
         return True
 
     def PrintSelectedCells(self, e):
@@ -58,8 +50,8 @@ class PSI(wx.App):
 
     def Close(self, e):
         print 'Closing application...'
-        self.results.Close()
-        self.frame.Close()
+        self.results.Close(False)
+        self.frame.Close(False)
 
     def OpenFile(self, e):
         print 'About to open file...'
@@ -88,13 +80,8 @@ class PSI(wx.App):
             self.ResultText.AppendText(summary)
             for i in Result.keys():
                 self.ResultText.AppendText("{0}: {1}\n".format(i, Result[i]))
-            bitmap = wx.EmptyBitmap(200, 200)
-            canvas = wx.MemoryDC(bitmap)
-            canvas.SetBrush(wx.Brush('green'))
-            canvas.SetPen(wx.Pen('red', 1))
-            canvas.Clear()
-            canvas.DrawCircle(10, 10, 10)
-            self.ResultGraph.SetBitmap(bitmap)
+            self.ResultGraph.DrawLine(35, 75, 85, 42)
+            self.ResultGraph.DrawCircle(235, 175, 85, 'blue', 2, 'yellow')
             self.results.Show()
 
 if __name__ == '__main__':
