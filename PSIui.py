@@ -83,6 +83,7 @@ class ResultDialog (wx.Dialog):
         pre = wx.PreDialog()
         self.res.LoadOnDialog(pre, parent, u'ResultDialog')
         self.PostCreate(pre)
+        self.properties = properties
         self.SetDimensions(int(properties.GetProperty(u'results',
                                                       u'x-position')),
                            int(properties.GetProperty(u'results',
@@ -96,4 +97,11 @@ class ResultDialog (wx.Dialog):
         xrc.XRCCTRL(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
 
     def Close(self, event):
+        (x, y) = self.GetPosition()
+        self.properties.SetProperty(u'results', u'x-position', x)
+        self.properties.SetProperty(u'results', u'y-position', y)
+        (w, h) = self.GetSize()
+        self.properties.SetProperty(u'results', u'x-size', w)
+        self.properties.SetProperty(u'results', u'y-size', h)
+        self.properties.Save()
         wx.Dialog.Close(self, False)

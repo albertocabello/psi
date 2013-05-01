@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <properties>
 <component id="main-window">
-<x-size>550</x-size>
-<y-size>400</y-size>
-<x-position>50</x-position>
-<y-position>50</y-position>
+<x-size>661</x-size>
+<y-size>628</y-size>
+<x-position>11</x-position>
+<y-position>8</y-position>
 </component>
 <component id="results">
-<x-size>250</x-size>
-<y-size>200</y-size>
-<x-position>450</x-position>
-<y-position>150</y-position>
+<x-size>390</x-size>
+<y-size>344</y-size>
+<x-position>526</x-position>
+<y-position>336</y-position>
 </component>
 </properties>
