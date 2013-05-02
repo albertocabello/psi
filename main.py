@@ -17,6 +17,7 @@ class PSI(wx.App):
         self.props.Open('properties.xml')
         self.res = xrc.XmlResource(u'mainGrid.xrc')
         self.frame = self.res.LoadFrame(None, u'mainFrame')
+        self.AboutDialog = self.res.LoadDialog(self.frame, u'AboutDialog')
         self.mainGrid = xrc.XRCCTRL(self.frame, u'mainGrid')
         self.mainGrid.CreateGrid(1000, 26)
         self.mainGrid.EnableDragRowSize(False)
@@ -29,6 +30,8 @@ class PSI(wx.App):
                         id = xrc.XRCID(u'Open'))
         self.frame.Bind(wx.EVT_MENU, self.DoLR,
                         id = xrc.XRCID(u'LR'))
+        self.frame.Bind(wx.EVT_MENU, lambda x: self.AboutDialog.Show(),
+                        id = xrc.XRCID(u'About'))
         self.frame.SetDimensions(int(self.props.GetProperty(u'main-window',
                                                             u'x-position')),
                                  int(self.props.GetProperty(u'main-window',
@@ -38,7 +41,7 @@ class PSI(wx.App):
                                  int(self.props.GetProperty(u'main-window',
                                                             u'y-size')))
         self.frame.Show()
-        self.results = PSIui.ResultDialog(self.frame, self.props)
+        self.results = PSIui.Result(self.frame, self.props)
         self.ResultText = xrc.XRCCTRL(self.results, u'ResultText')
         self.ResultGraph = xrc.XRCCTRL(self.results, u'ResultGraph')
         self.results.Show()
