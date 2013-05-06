@@ -19,6 +19,10 @@ class DataGrid (wx.grid.Grid):
         self.SetDefaultCellAlignment(wx.ALIGN_RIGHT, wx.ALIGN_BOTTOM)
 
     def LoadCSV(self, filename, separator = ','):
+        """
+        Load values stored in file 'filename' separated by commas (or
+        optional parameter 'separator').
+        """
         with open(filename) as f:
             i = 0
             print 'Loading file %s' % filename
@@ -34,6 +38,10 @@ class DataGrid (wx.grid.Grid):
                 i = i + 1
 
     def GetSelectedCellsList(self, orientation = 'Z'):
+        """
+        Returns selected cells as an array of values ordered by rows
+        (or by columns if orientation = 'N').
+        """
         cells = []
         try:
             y0 = x0 = self.GetSelectionBlockTopLeft()[0][0]
@@ -53,6 +61,10 @@ class DataGrid (wx.grid.Grid):
         return cells
 
     def GetSelectedCellsArray(self, orientation = 'Rows'):
+        """
+        Returns selected cells as an array of arrays (rows, or columns
+        if orientation = 'Cols').
+        """
         cells = []
         try:
             y0 = x0 = self.GetSelectionBlockTopLeft()[0][0]
