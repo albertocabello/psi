@@ -61,7 +61,11 @@ class PSI(wx.App):
         self.props.SetProperty(u'main-window', u'x-size', w)
         self.props.SetProperty(u'main-window', u'y-size', h)
         self.props.Save()
-        self.results.Close(False)
+        try:
+            self.results.Close(False)
+        except:
+            # Results window could have been closed before
+            None
         self.frame.Close(False)
 
     def OpenFile(self, e):
@@ -92,28 +96,12 @@ class PSI(wx.App):
             for i in Result.keys():
                 self.ResultText.AppendText("{0}: {1}\n".format(i, Result[i]))
             self.ResultGraph.DrawGrid()
-            width = self.ResultGraph.size[0] - 2*self.ResultGraph.margin[0]
-            height = self.ResultGraph.size[1] - 2*self.ResultGraph.margin[1]
-            data = self.mainGrid.GetSelectedCellsList('N')
-            print data
-            (minX, maxX, minY, maxY) = Math.RangeN(data)
-            X0 = minX
-            Y0 = Result['slope']*X0 + Result['intercept']
-            X1 = maxX
-            Y1 = Result['slope']*X1 + Result['intercept']
-            aqua = wx.Color(0, 128, 128)
-            self.ResultGraph.DrawLine(
-                int(2*self.ResultGraph.margin[0] + (float(X0) - minX)*
-                    (width - 2*self.ResultGraph.margin[0])/(maxX - minX)),
-                int(height - ((float(Y0) - minY)*
-                    (height - 2*self.ResultGraph.margin[1])/(maxY - minY))),
-                int(2*self.ResultGraph.margin[0] + (float(X1) - minX)*
-                    (width - 2*self.ResultGraph.margin[0])/(maxX - minX)),
-                int(height - ((float(Y1) - minY)*
-                    (height - 2*self.ResultGraph.margin[1])/(maxY - minY))),
-                color = aqua, width = 3)
-            lightblue = wx.Color(160, 150, 255)
-            self.ResultGraph.PlotXYData(data, color = lightblue, radius = 3)
+            style = {}
+            style['dots_color'] = wx.Color(128, 128, 0)
+            style['dots_radius'] = 3
+            style['line_color'] = wx.Color(128, 0, 128)
+            style['line_width'] = 2
+            analyst.DoDrawing(self.ResultGraph, style)
             self.results.Show()
 
 if __name__ == '__main__':

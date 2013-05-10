@@ -3,6 +3,7 @@
 
 import scipy.stats
 import numpy
+import Math
 
 
 class LinearRegression:
@@ -26,15 +27,33 @@ class LinearRegression:
 
     def Calculate(self):
         N = self.Size/2
-        Res = {}
-        Res['slope'], Res['intercept'],\
-        Res['r_value'], Res['p_value'], Res['std_err'] =\
+        self.Res = {}
+        self.Res['slope'], self.Res['intercept'],\
+        self.Res['r_value'], self.Res['p_value'], self.Res['std_err'] =\
         scipy.stats.linregress(numpy.array(self.Data[:N], dtype = float),
                                numpy.array(self.Data[N:], dtype = float))
-        return Res
+        return self.Res
 
-    def DoDrawing(self, Style):
-        return
+    def DoDrawing(self, canvas, style):
+        width = canvas.size[0] - 2*canvas.margin[0]
+        height = canvas.size[1] - 2*canvas.margin[1]
+        (minX, maxX, minY, maxY) = Math.RangeN(self.Data)
+        X0 = minX
+        Y0 = self.Res['slope']*X0 + self.Res['intercept']
+        X1 = maxX
+        Y1 = self.Res['slope']*X1 + self.Res['intercept']
+        canvas.DrawLine(
+            int(2*canvas.margin[0] + (float(X0) - minX)*
+                (width - 2*canvas.margin[0])/(maxX - minX)),
+            int(height - ((float(Y0) - minY)*
+                (height - 2*canvas.margin[1])/(maxY - minY))),
+            int(2*canvas.margin[0] + (float(X1) - minX)*
+                (width - 2*canvas.margin[0])/(maxX - minX)),
+            int(height - ((float(Y1) - minY)*
+                (height - 2*canvas.margin[1])/(maxY - minY))),
+            color = style['dots_color'], width = style['line_width'])
+        canvas.PlotXYData(self.Data, color = style['line_color'],
+            radius = style['dots_radius'])
 
 
 class SmirnoffTest:
