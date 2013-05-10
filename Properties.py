@@ -8,17 +8,23 @@ from xml.etree.ElementTree import ElementTree
 class XMLProperties:
 
     def Open(self, filename):
-        self.filename = filename
-        self.properties = lxml.etree.parse(filename)
-        self.root = self.properties.getroot()
-        return
+        try:
+            self.filename = filename
+            self.properties = lxml.etree.parse(filename)
+            self.root = self.properties.getroot()
+            return True
+        except IOError:
+            return False
 
     def Save(self, filename = None):
-        if filename == None:
-            filename = self.filename
-        writer = ElementTree(self.root)
-        writer.write(filename, encoding = 'utf-8')
-        return
+        try:
+            if filename == None:
+                filename = self.filename
+            writer = ElementTree(self.root)
+            writer.write(filename, encoding = 'utf-8')
+            return True
+        except IOError:
+            return False
 
     def GetProperty(self, component, name):
         return self.root.findtext('component[@id="' + component + '"]/' + name)
