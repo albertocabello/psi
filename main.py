@@ -5,7 +5,6 @@ from wx import xrc
 from wx import grid
 import Analysis
 import Graphics
-import Math
 import Properties
 import PSIui
 
@@ -29,9 +28,11 @@ class PSI(wx.App):
         self.frame.Bind(wx.EVT_MENU, self.OpenFile,
                         id = xrc.XRCID(u'Open'))
         self.frame.Bind(wx.EVT_MENU, self.DoLR,
-                        id = xrc.XRCID(u'LR'))
+                                id = xrc.XRCID(u'LR'))
+        self.frame.Bind(wx.EVT_MENU, self.Descriptive,
+                                id = xrc.XRCID(u'DescStats'))
         self.frame.Bind(wx.EVT_MENU, lambda x: self.AboutDialog.Show(),
-                        id = xrc.XRCID(u'About'))
+                                id = xrc.XRCID(u'About'))
         self.frame.SetDimensions(int(self.props.GetProperty(u'main-window',
                                                             u'x-position')),
                                  int(self.props.GetProperty(u'main-window',
@@ -85,24 +86,27 @@ class PSI(wx.App):
                 sv.Destroy()
 
     def DoLR(self, e):
-        print 'Linear Regression:'
         analyst = Analysis.LinearRegression()
         if analyst.LoadData(self.mainGrid.GetSelectedCellsList('N')):
             self.ResultText.Clear()
-            Result = analyst.Calculate()
-            summary = "Y = {0:.2}*X + {1:.2}\n".format(Result['slope'],
-                                                       Result['intercept'])
-            self.ResultText.AppendText(summary)
-            for i in Result.keys():
-                self.ResultText.AppendText("{0}: {1}\n".format(i, Result[i]))
-            self.ResultGraph.DrawGrid()
-            style = {}
-            style['dots_color'] = wx.Color(128, 128, 0)
-            style['dots_radius'] = 3
-            style['line_color'] = wx.Color(128, 0, 128)
-            style['line_width'] = 2
-            analyst.DoDrawing(self.ResultGraph, style)
-            self.results.Show()
+            if analyst.Calculate():
+                analyst.PrintResult(self.ResultText)
+                self.ResultGraph.DrawGrid()
+                style = {}
+                style['dots_color'] = wx.Color(128, 128, 0)
+                style['dots_radius'] = 3
+                style['line_color'] = wx.Color(128, 0, 128)
+                style['line_width'] = 2
+                analyst.DoDrawing(self.ResultGraph, style)
+                self.results.Show()
+
+    def Descriptive(self, e):
+        analyst = Analysis.BasicStatistics()
+        if analyst.LoadData(self.mainGrid.GetSelectedCellsList('N')):
+            self.ResultText.Clear()
+            if analyst.Calculate():
+                analyst.PrintResult(self.ResultText)
+                                    
 
 if __name__ == '__main__':
     app = PSI(False)
