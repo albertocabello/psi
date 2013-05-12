@@ -86,3 +86,27 @@ class ResultGraph(wx.ScrolledWindow):
                     (height - 2*self.margin[1])/(maxY - minY)))
             self.DrawPoint(x, y, color, radius)
         self.DrawPoint(x, y, color, radius)
+
+
+class Style:
+
+    def __init__(self, properties):
+        self.style = {}
+        r = int(properties.GetProperty('style', 'dots-color-r'))
+        g = int(properties.GetProperty('style', 'dots-color-g'))
+        b = int(properties.GetProperty('style', 'dots-color-b'))
+        self.style['dots-color'] = wx.Color(r, g, b)
+        radius = int(properties.GetProperty('style', 'dots-radius'))
+        self.style['dots-radius'] = radius
+        r = int(properties.GetProperty('style', 'line-color-r'))
+        g = int(properties.GetProperty('style', 'line-color-g'))
+        b = int(properties.GetProperty('style', 'line-color-b'))
+        self.style['line-color'] = wx.Color(r, g, b)
+        width = int(properties.GetProperty('style', 'line-width'))
+        self.style['line-width'] = width
+
+    def __getitem__(self, name):
+        return self.style[name]
+
+    def GetStyle(self):
+        return self.style

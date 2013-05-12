@@ -1,14 +1,24 @@
 <properties>
 <component id="main-window">
-<x-size>661</x-size>
-<y-size>536</y-size>
+<x-size>463</x-size>
+<y-size>623</y-size>
 <x-position>11</x-position>
 <y-position>8</y-position>
 </component>
 <component id="results">
 <x-size>496</x-size>
-<y-size>579</y-size>
-<x-position>511</x-position>
-<y-position>103</y-position>
+<y-size>593</y-size>
+<x-position>478</x-position>
+<y-position>9</y-position>
+</component>
+<component id="style">
+<dots-color-r>99</dots-color-r>
+<dots-color-g>99</dots-color-g>
+<dots-color-b>237</dots-color-b>
+<dots-radius>3</dots-radius>
+<line-color-r>255</line-color-r>
+<line-color-g>192</line-color-g>
+<line-color-b>203</line-color-b>
+<line-width>2</line-width>
 </component>
 </properties>

@@ -33,7 +33,7 @@ class BasicStatistics:
         return True
 
     def PrintResult(self, text):
-        text.AppendText(u'Data range: {0} --'.format(self.Res['min']))
+        text.AppendText(u'Data range: {0} -- '.format(self.Res['min']))
         text.AppendText(u"{0}\n".format(self.Res['max']))
         text.AppendText(u"Mean: {0}\n".format(self.Res['mean']))
         text.AppendText(u"Median: {0}\n".format(self.Res['median']))
@@ -86,9 +86,9 @@ class LinearRegression:
                 (width - 2*canvas.margin[0])/(maxX - minX)),
             int(height - ((float(Y1) - minY)*
                 (height - 2*canvas.margin[1])/(maxY - minY))),
-            color = style['dots_color'], width = style['line_width'])
-        canvas.PlotXYData(self.Data, color = style['line_color'],
-            radius = style['dots_radius'])
+            color = style['line-color'], width = style['line-width'])
+        canvas.PlotXYData(self.Data, color = style['dots-color'],
+            radius = style['dots-radius'])
 
     def PrintResult(self, text):
         summary = "Y = {0:.2}*X + {1:.2}\n".format(self.Res['slope'],
