@@ -57,40 +57,7 @@ class PSI(wx.App):
             print i
 
     def ShowStyleDialog(self, e):
-        styleDialog = self.res.LoadDialog(self.frame, u'StyleDialog')
-        radius = self.props.GetProperty('style', 'dots-radius')
-        xrc.XRCCTRL(styleDialog, u'DotsRadius').SetValue(int(radius))
-        self.dots_r = self.props.GetProperty('style', 'dots-color-r')
-        self.dots_g = self.props.GetProperty('style', 'dots-color-g')
-        self.dots_b = self.props.GetProperty('style', 'dots-color-b')
-        color = wx.Color(int(self.dots_r), int(self.dots_g), int(self.dots_b))
-        DotsColorCtrl = xrc.XRCCTRL(styleDialog, u'DotsColor')
-        DotsColorCtrl.SetColour(color)
-        width = self.props.GetProperty('style', 'line-width')
-        xrc.XRCCTRL(styleDialog, u'LineWidth').SetValue(int(width))
-        LineColorCtrl = xrc.XRCCTRL(styleDialog, u'LineColor')
-        self.line_r = self.props.GetProperty('style', 'line-color-r')
-        self.line_g = self.props.GetProperty('style', 'line-color-g')
-        self.line_b = self.props.GetProperty('style', 'line-color-b')
-        color = wx.Color(int(self.line_r), int(self.line_g), int(self.line_b))
-        LineColorCtrl.SetColour(color)
-        if styleDialog.ShowModal() == wx.ID_OK:
-            self.dots_r = DotsColorCtrl.GetColour().Red()
-            self.dots_g = DotsColorCtrl.GetColour().Green()
-            self.dots_b = DotsColorCtrl.GetColour().Blue()            
-            self.props.SetProperty('style', 'dots-color-r', self.dots_r)
-            self.props.SetProperty('style', 'dots-color-g', self.dots_g)
-            self.props.SetProperty('style', 'dots-color-b', self.dots_b)
-            radius = xrc.XRCCTRL(styleDialog, u'DotsRadius').GetValue()
-            self.line_r = LineColorCtrl.GetColour().Red()
-            self.line_g = LineColorCtrl.GetColour().Green()
-            self.line_b = LineColorCtrl.GetColour().Blue()            
-            self.props.SetProperty('style', 'dots-radius', radius)
-            self.props.SetProperty('style', 'line-color-r', self.line_r)
-            self.props.SetProperty('style', 'line-color-g', self.line_g)
-            self.props.SetProperty('style', 'line-color-b', self.line_b)
-            width = xrc.XRCCTRL(styleDialog, u'LineWidth').GetValue()
-            self.props.SetProperty('style', 'line-width', width)
+        styleDialog = PSIui.StyleDialog(self.frame, self.props)
 
     def Close(self, e):
         print 'Closing application...'

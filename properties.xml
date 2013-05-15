@@ -12,13 +12,13 @@
 <y-position>9</y-position>
 </component>
 <component id="style">
-<dots-color-r>30</dots-color-r>
-<dots-color-g>224</dots-color-g>
-<dots-color-b>255</dots-color-b>
-<dots-radius>3</dots-radius>
-<line-color-r>237</line-color-r>
-<line-color-g>172</line-color-g>
-<line-color-b>52</line-color-b>
+<dots-color-r>255</dots-color-r>
+<dots-color-g>30</dots-color-g>
+<dots-color-b>43</dots-color-b>
+<dots-radius>4</dots-radius>
+<line-color-r>52</line-color-r>
+<line-color-g>208</line-color-g>
+<line-color-b>237</line-color-b>
 <line-width>2</line-width>
 </component>
 </properties>
