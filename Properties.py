@@ -25,14 +25,23 @@ class XMLProperties:
             return True
         except IOError:
             return False
+        except AttributeError:
+            return False
 
     def GetProperty(self, component, name):
-        return self.root.findtext('component[@id="' + component + '"]/' + name)
+        try:
+            return self.root.findtext('component[@id="' + component + '"]/' + name)
+        except AttributeError:
+            return False
 
     def SetProperty(self, component, name, value):
-        node = self.root.find('component[@id="' + component + '"]/' + name)
-        node.text = format(value)
-        return node
+        try:
+            node = self.root.find('component[@id="' + component + '"]/' + name)
+            node.text = format(value)
+            return node
+        except AttributeError:
+            # TODO: Create node in case it doesn't exist.
+            return False
 
 if __name__ == '__main__':
     x = XMLProperties()

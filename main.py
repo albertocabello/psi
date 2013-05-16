@@ -58,6 +58,8 @@ class PSI(wx.App):
 
     def ShowStyleDialog(self, e):
         styleDialog = PSIui.StyleDialog(self.frame, self.props)
+        self.ResultText.SetFont(styleDialog.newFont)
+        styleDialog.Destroy()
 
     def Close(self, e):
         print 'Closing application...'

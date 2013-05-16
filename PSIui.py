@@ -90,35 +90,39 @@ class DataGrid (wx.grid.Grid):
 
 class Result (wx.Frame):
 
-    def __init__(self, parent, properties):
+    def __init__(self, parent, props):
         self.res = xrc.XmlResource(u'mainGrid.xrc')
-        # pre = wx.PreDialog()
-        # self.res.LoadOnDialog(pre, parent, u'ResultDialog')
-        # self.PostCreate(pre)
         pre = wx.PreFrame()
         self.res.LoadOnFrame(pre, parent, u'ResultFrame')
         self.PostCreate(pre)
-        self.properties = properties
-        self.SetDimensions(int(properties.GetProperty(u'results',
-                                                      u'x-position')),
-                           int(properties.GetProperty(u'results',
-                                                      u'y-position')),
-                           int(properties.GetProperty(u'results',
-                                                      u'x-size')),
-                           int(properties.GetProperty(u'results',
-                                                      u'y-size')))
-        font = wx.Font(8, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Monospace')
+        self.props = props
+        self.SetDimensions(int(props.GetProperty(u'results',
+                                                 u'x-position')),
+                           int(props.GetProperty(u'results',
+                                                 u'y-position')),
+                           int(props.GetProperty(u'results',
+                                                 u'x-size')),
+                           int(props.GetProperty(u'results',
+                                                 u'y-size')))
+        font = xrc.XRCCTRL(self, u'ResultText').GetFont()
+        font.SetEncoding(int(props.GetProperty(u'results', u'encoding')))
+        font.SetFaceName(props.GetProperty(u'results', u'face'))
+        font.SetFamily(int(props.GetProperty(u'results', u'family')))
+        font.SetPointSize(int(props.GetProperty(u'results', u'point-size')))
+        font.SetStyle(int(props.GetProperty(u'results', u'style')))
+        font.SetUnderlined(bool(props.GetProperty(u'results', u'underlined')))
+        font.SetWeight(int(props.GetProperty(u'results', u'weight')))
         xrc.XRCCTRL(self, u'ResultText').SetFont(font)
         xrc.XRCCTRL(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
 
     def Close(self, event):
         (x, y) = self.GetPosition()
-        self.properties.SetProperty(u'results', u'x-position', x)
-        self.properties.SetProperty(u'results', u'y-position', y)
+        self.props.SetProperty(u'results', u'x-position', x)
+        self.props.SetProperty(u'results', u'y-position', y)
         (w, h) = self.GetSize()
-        self.properties.SetProperty(u'results', u'x-size', w)
-        self.properties.SetProperty(u'results', u'y-size', h)
-        self.properties.Save()
+        self.props.SetProperty(u'results', u'x-size', w)
+        self.props.SetProperty(u'results', u'y-size', h)
+        self.props.Save()
         wx.Frame.Close(self, False)
 
 
@@ -145,6 +149,17 @@ class StyleDialog(wx.Dialog):
         self.line_b = props.GetProperty('style', 'line-color-b')
         color = wx.Color(int(self.line_r), int(self.line_g), int(self.line_b))
         LineColorCtrl.SetColour(color)
+        font = xrc.XRCCTRL(self, u'LabelFontStyle').GetFont()
+        font.SetEncoding(int(props.GetProperty(u'results', u'encoding')))
+        font.SetFaceName(props.GetProperty(u'results', u'face'))
+        font.SetFamily(int(props.GetProperty(u'results', u'family')))
+        font.SetPointSize(int(props.GetProperty(u'results', u'point-size')))
+        font.SetStyle(int(props.GetProperty(u'results', u'style')))
+        font.SetUnderlined(bool(props.GetProperty(u'results', u'underlined')))
+        font.SetWeight(int(props.GetProperty(u'results', u'weight')))
+        xrc.XRCCTRL(self, u'LabelFontStyle').SetFont(font)
+        self.newFont = font
+        xrc.XRCCTRL(self, u'ButtonFontStyle').Bind(wx.EVT_LEFT_UP, self.SelectNewFont)
         if self.ShowModal() == wx.ID_OK:
             self.dots_r = DotsColorCtrl.GetColour().Red()
             self.dots_g = DotsColorCtrl.GetColour().Green()
@@ -162,3 +177,20 @@ class StyleDialog(wx.Dialog):
             props.SetProperty('style', 'line-color-b', self.line_b)
             width = xrc.XRCCTRL(self, u'LineWidth').GetValue()
             props.SetProperty('style', 'line-width', width)
+            props.SetProperty(u'results', u'encoding', self.newFont.GetEncoding())
+            props.SetProperty(u'results', u'face', self.newFont.GetFaceName())
+            props.SetProperty(u'results', u'family', self.newFont.GetFamily())
+            props.SetProperty(u'results', u'point-size', self.newFont.GetPointSize())
+            props.SetProperty(u'results', u'style', self.newFont.GetStyle())
+            props.SetProperty(u'results', u'underlined', self.newFont.GetUnderlined())
+            props.SetProperty(u'results', u'weight', self.newFont.GetWeight())
+            props.Save()
+
+    def SelectNewFont(self, e):
+            data = wx.FontData()
+            data.SetInitialFont(xrc.XRCCTRL(self, u'LabelFontStyle').GetFont())
+            dialog = wx.FontDialog(self, data)
+            if dialog.ShowModal() == wx.ID_OK:
+                self.newFont = dialog.GetFontData().GetChosenFont()
+                xrc.XRCCTRL(self, u'LabelFontStyle').SetFont(self.newFont)
+            dialog.Destroy()
