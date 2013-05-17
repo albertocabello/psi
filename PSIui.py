@@ -191,6 +191,6 @@ class StyleDialog(wx.Dialog):
             Data.SetInitialFont(xrc.XRCCTRL(self, u'LabelFontStyle').GetFont())
             Dialog = wx.FontDialog(self, Data)
             if Dialog.ShowModal() == wx.ID_OK:
-                Delf.newFont = Dialog.GetFontData().GetChosenFont()
+                self.newFont = Dialog.GetFontData().GetChosenFont()
                 xrc.XRCCTRL(self, u'LabelFontStyle').SetFont(self.newFont)
             Dialog.Destroy()
