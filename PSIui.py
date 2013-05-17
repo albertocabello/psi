@@ -10,8 +10,8 @@ import Graphics
 class DataGrid (wx.grid.Grid):
 
     def __init__(self):
-        p = grid.PreGrid()
-        self.PostCreate(p)
+        # p = grid.PreGrid()
+        self.PostCreate(grid.PreGrid())
         self.Bind(wx.EVT_WINDOW_CREATE, self.OnCreate)
 
     def OnCreate(self, evt):
@@ -42,7 +42,7 @@ class DataGrid (wx.grid.Grid):
         Returns selected cells as an array of values ordered by rows
         (or by columns if orientation = 'N').
         """
-        cells = []
+        Cells = []
         try:
             y0 = x0 = self.GetSelectionBlockTopLeft()[0][0]
             y1 = x1 = self.GetSelectionBlockTopLeft()[0][1]
@@ -51,21 +51,21 @@ class DataGrid (wx.grid.Grid):
             if (orientation == 'Z'):
                 for i in range(x0, y0 + 1):
                     for j in range(x1, y1 + 1):
-                        cells.append(self.GetCellValue(i, j))
+                        Cells.append(self.GetCellValue(i, j))
             elif (orientation == 'N'):
                 for j in range(x1, y1 + 1):
                     for i in range(x0, y0 + 1):
-                        cells.append(self.GetCellValue(i, j))
+                        Cells.append(self.GetCellValue(i, j))
         except IndexError:
             None
-        return cells
+        return Cells
 
     def GetSelectedCellsArray(self, orientation = 'Rows'):
         """
         Returns selected cells as an array of arrays (rows, or columns
         if orientation = 'Cols').
         """
-        cells = []
+        Cells = []
         try:
             y0 = x0 = self.GetSelectionBlockTopLeft()[0][0]
             y1 = x1 = self.GetSelectionBlockTopLeft()[0][1]
@@ -73,28 +73,28 @@ class DataGrid (wx.grid.Grid):
             y1 = self.GetSelectionBlockBottomRight()[0][1]
             if (orientation == 'Rows'):
                 for i in range(x0, y0 + 1):
-                    row = []
+                    Row = []
                     for j in range(x1, y1 + 1):
-                        row.append(self.GetCellValue(i, j))
-                    cells.append(row)
+                        Row.append(self.GetCellValue(i, j))
+                    Cells.append(Row)
             elif (orientation == 'Cols'):
                 for j in range(x1, y1 + 1):
-                    col = []
+                    Col = []
                     for i in range(x0, y0 + 1):
-                        col.append(self.GetCellValue(i, j))
-                    cells.append(col)
+                        Col.append(self.GetCellValue(i, j))
+                    Cells.append(Col)
         except IndexError:
             None
-        return cells
+        return Cells
 
 
 class Result (wx.Frame):
 
     def __init__(self, parent, props):
-        self.res = xrc.XmlResource(u'mainGrid.xrc')
-        pre = wx.PreFrame()
-        self.res.LoadOnFrame(pre, parent, u'ResultFrame')
-        self.PostCreate(pre)
+        self.Res = xrc.XmlResource(u'mainGrid.xrc')
+        Pre = wx.PreFrame()
+        self.Res.LoadOnFrame(Pre, parent, u'ResultFrame')
+        self.PostCreate(Pre)
         self.props = props
         self.SetDimensions(int(props.GetProperty(u'results',
                                                  u'x-position')),
@@ -187,10 +187,10 @@ class StyleDialog(wx.Dialog):
             props.Save()
 
     def SelectNewFont(self, e):
-            data = wx.FontData()
-            data.SetInitialFont(xrc.XRCCTRL(self, u'LabelFontStyle').GetFont())
-            dialog = wx.FontDialog(self, data)
-            if dialog.ShowModal() == wx.ID_OK:
-                self.newFont = dialog.GetFontData().GetChosenFont()
+            Data = wx.FontData()
+            Data.SetInitialFont(xrc.XRCCTRL(self, u'LabelFontStyle').GetFont())
+            Dialog = wx.FontDialog(self, Data)
+            if Dialog.ShowModal() == wx.ID_OK:
+                Delf.newFont = Dialog.GetFontData().GetChosenFont()
                 xrc.XRCCTRL(self, u'LabelFontStyle').SetFont(self.newFont)
-            dialog.Destroy()
+            Dialog.Destroy()
