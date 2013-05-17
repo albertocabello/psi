@@ -113,6 +113,7 @@ class Result (wx.Frame):
         font.SetUnderlined(bool(props.GetProperty(u'results', u'underlined')))
         font.SetWeight(int(props.GetProperty(u'results', u'weight')))
         xrc.XRCCTRL(self, u'ResultText').SetFont(font)
+        xrc.XRCCTRL(self, u'ResultGraph').SetStyle(Graphics.Style(props))
         xrc.XRCCTRL(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
 
     def Close(self, event):

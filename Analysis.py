@@ -73,6 +73,8 @@ class LinearRegression:
         width = canvas.size[0] - 2*canvas.margin[0]
         height = canvas.size[1] - 2*canvas.margin[1]
         (minX, maxX, minY, maxY) = Math.RangeN(self.Data)
+        canvas.SetDrawingArea(minX, maxX, minY, maxY)
+        canvas.SetStyle(style)
         X0 = minX
         Y0 = self.Res['slope']*X0 + self.Res['intercept']
         X1 = maxX
@@ -87,8 +89,7 @@ class LinearRegression:
             int(height - ((float(Y1) - minY)*
                 (height - 2*canvas.margin[1])/(maxY - minY))),
             color = style['line-color'], width = style['line-width'])
-        canvas.PlotXYData(self.Data, color = style['dots-color'],
-            radius = style['dots-radius'])
+        canvas.PlotXYData(self.Data)
 
     def PrintResult(self, text):
         summary = "Y = {0:.2}*X + {1:.2}\n".format(self.Res['slope'],

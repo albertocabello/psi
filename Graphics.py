@@ -3,7 +3,6 @@
 
 import wx
 from wx import xrc
-import Math
 
 
 class ResultGraph(wx.ScrolledWindow):
@@ -12,7 +11,7 @@ class ResultGraph(wx.ScrolledWindow):
         pre = wx.PreScrolledWindow()
         res = xrc.XmlResource(u'mainGrid.xrc')
         self.pos = (0, 0)
-        self.margin = (0, 0)
+        self.margin = (10, 10)
         self.size = (450, 450)
         self.PostCreate(pre)
         self.Bind(wx.EVT_PAINT, self.PostInit)
@@ -40,52 +39,72 @@ class ResultGraph(wx.ScrolledWindow):
         dc = self.Init()
         self.Show()
 
-    def DrawCircle(self, x, y, r, color = 'black', width = 1, fill = 'white'):
+    def DrawCircle(self, x, y):
         dc = self.Init()
-        dc.SetPen(wx.Pen(color, width))
-        dc.SetBrush(wx.Brush(fill))
-        dc.DrawCircle(x, y, r)
+        color = self.style['dots-color']
+        radius = self.style['dots-radius']
+        dc.SetPen(wx.Pen(color, 1))
+        dc.SetBrush(wx.Brush(color))
+        dc.DrawCircle(x, y, radius)
 
-    def DrawGrid(self, margin = (20, 20),
-                 color = 'black', width = 2, ticks = '10'):
+    def DrawGrid(self, color = 'black', width = 2, ticks = '10'):
         dc = self.Init()
         dc.Clear()
-        self.margin = margin
         dc.SetPen(wx.Pen(color, width))
-        width = self.size[0] - 2*margin[0]
-        height = self.size[1] - 2*margin[1]
-        dc.DrawRectangle(margin[0], margin[1], width, height)
+        width = self.size[0] - 2*self.margin[0]
+        height = self.size[1] - 2*self.margin[1]
+        dc.DrawRectangle(self.margin[0], self.margin[1], width, height)
         if ticks > 0:
-            for i in range(30, self.size[1] - margin[1], 50):
+            for i in range(30, self.size[1] - self.margin[1], 50):
                 dc.DrawLine(20, i, 24, i)
-            for i in range(20, self.size[0] - margin[0], 50):
-                dc.DrawLine(i, self.size[1] - margin[1],
-                            i, self.size[1] - margin[1] + 5)
+            for i in range(20, self.size[0] - self.margin[0], 50):
+                dc.DrawLine(i, self.size[1] - self.margin[1],
+                            i, self.size[1] - self.margin[1] + 5)
 
     def DrawLine(self, x0, y0, x1, y1, color = 'black', width = 1):
         dc = self.Init()
         dc.SetPen(wx.Pen(color, width))
         dc.DrawLine(x0, y0, x1, y1)
 
-    def DrawPoint(self, x, y, color = 'black', radius = 0):
+    def DrawPoint(self, x, y):
         dc = self.Init()
+        color = self.style['dots-color']
+        radius = self.style['dots-radius']
         dc.SetPen(wx.Pen(color, 1))
         if radius == 0:
             dc.DrawPoint(x, y)
         else:
-            self.DrawCircle(x, y, radius, color = color, fill = color)
+            self.DrawCircle(x, y)
 
-    def PlotXYData(self, data, color = 'black', radius = 1):
+    def PlotXY(self, point):
         width = self.size[0] - 2*self.margin[0]
         height = self.size[1] - 2*self.margin[1]
-        (minX, maxX, minY, maxY) = Math.RangeN(data)
+        x = int(2*self.margin[0] + (float(point[0]) - self.minX)*
+                (width - 2*self.margin[0])/(self.maxX - self.minX))
+        y = int(2*self.margin[1] + (float(point[1]) - self.minY)*
+                (height - 2*self.margin[1])/(self.maxY - self.minY))
+        print x, y
+        self.DrawPoint(x, y)
+
+    def PlotXYData(self, data):
         for i in range(0, len(data)/2):
-            x = int(2*self.margin[0] + (float(data[i]) - minX)*
-                    (width - 2*self.margin[0])/(maxX - minX))
-            y = int(height - ((float(data[i + len(data)/2]) - minY)*
-                    (height - 2*self.margin[1])/(maxY - minY)))
-            self.DrawPoint(x, y, color, radius)
-        self.DrawPoint(x, y, color, radius)
+            x = data[i]
+            y = data[i + len(data)/2]
+            self.PlotXY((x, y))
+        self.PlotXY((x, y))
+
+    def SetDrawingArea(self, left, right, top, bottom):
+        self.minX = left
+        self.maxX = right
+        self.minY = bottom
+        self.maxY = top
+
+    def SetMargin(self, x_margin, y_margin):
+        self.margin[0] = x_margin
+        self.margin[1] = y_margin
+
+    def SetStyle(self, style):
+        self.style = style
 
 
 class Style:
