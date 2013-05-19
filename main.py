@@ -58,7 +58,8 @@ class PSI(wx.App):
 
     def ShowStyleDialog(self, e):
         styleDialog = PSIui.StyleDialog(self.frame, self.props)
-        self.ResultText.SetFont(styleDialog.newFont)
+        self.ResultText.SetFont(styleDialog.ResultTextLabel.GetFont())
+        self.ResultGraph.SetFont(styleDialog.GraphTextLabel.GetFont())
         styleDialog.Destroy()
 
     def Close(self, e):
