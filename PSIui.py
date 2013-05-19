@@ -116,9 +116,9 @@ class Result (wx.Frame):
         font.SetPointSize(int(props[(u'results', u'graph-point-size')]))
         font.SetStyle(int(props[(u'results', u'graph-style')]))
         font.SetUnderlined(bool(props[(u'results', u'graph-underlined')]))
-        font.SetWeight(int(props[(u'results', u'text-weight')]))
-        xrc.XRCCTRL(self, u'ResultGraph').SetFont(font)
+        font.SetWeight(int(props[(u'results', u'graph-weight')]))
         xrc.XRCCTRL(self, u'ResultGraph').SetStyle(Graphics.Style(props))
+        xrc.XRCCTRL(self, u'ResultGraph').SetFont(font)
         xrc.XRCCTRL(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
 
     def Close(self, event):
