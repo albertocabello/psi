@@ -96,33 +96,29 @@ class Result (wx.Frame):
         self.Res.LoadOnFrame(Pre, parent, u'ResultFrame')
         self.PostCreate(Pre)
         self.props = props
-        self.SetDimensions(int(props.GetProperty(u'results',
-                                                 u'x-position')),
-                           int(props.GetProperty(u'results',
-                                                 u'y-position')),
-                           int(props.GetProperty(u'results',
-                                                 u'x-size')),
-                           int(props.GetProperty(u'results',
-                                                 u'y-size')))
+        self.SetDimensions(int(props[(u'results', u'x-position')]),
+                           int(props[(u'results', u'y-position')]),
+                           int(props[(u'results', u'x-size')]),
+                           int(props[(u'results', u'y-size')]))
         font = xrc.XRCCTRL(self, u'ResultText').GetFont()
-        font.SetEncoding(int(props.GetProperty(u'results', u'encoding')))
-        font.SetFaceName(props.GetProperty(u'results', u'face'))
-        font.SetFamily(int(props.GetProperty(u'results', u'family')))
-        font.SetPointSize(int(props.GetProperty(u'results', u'point-size')))
-        font.SetStyle(int(props.GetProperty(u'results', u'style')))
-        font.SetUnderlined(bool(props.GetProperty(u'results', u'underlined')))
-        font.SetWeight(int(props.GetProperty(u'results', u'weight')))
+        font.SetEncoding(int(props[(u'results', u'encoding')]))
+        font.SetFaceName(props[(u'results', u'face')])
+        font.SetFamily(int(props[(u'results', u'family')]))
+        font.SetPointSize(int(props[(u'results', u'point-size')]))
+        font.SetStyle(int(props[(u'results', u'style')]))
+        font.SetUnderlined(bool(props[(u'results', u'underlined')]))
+        font.SetWeight(int(props[(u'results', u'weight')]))
         xrc.XRCCTRL(self, u'ResultText').SetFont(font)
         xrc.XRCCTRL(self, u'ResultGraph').SetStyle(Graphics.Style(props))
         xrc.XRCCTRL(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
 
     def Close(self, event):
         (x, y) = self.GetPosition()
-        self.props.SetProperty(u'results', u'x-position', x)
-        self.props.SetProperty(u'results', u'y-position', y)
+        self.props[(u'results', u'x-position')] = x
+        self.props[(u'results', u'y-position')] = y
         (w, h) = self.GetSize()
-        self.props.SetProperty(u'results', u'x-size', w)
-        self.props.SetProperty(u'results', u'y-size', h)
+        self.props[(u'results', u'x-size')] = w
+        self.props[(u'results', u'y-size')] = h
         self.props.Save()
         wx.Frame.Close(self, False)
 
@@ -134,64 +130,64 @@ class StyleDialog(wx.Dialog):
         pre = wx.PreDialog()
         self.res.LoadOnDialog(pre, parent, u'StyleDialog')
         self.PostCreate(pre)
-        radius = props.GetProperty('style', 'dots-radius')
+        radius = props[('style', 'dots-radius')]
         xrc.XRCCTRL(self, u'DotsRadius').SetValue(int(radius))
-        self.dots_r = props.GetProperty('style', 'dots-color-r')
-        self.dots_g = props.GetProperty('style', 'dots-color-g')
-        self.dots_b = props.GetProperty('style', 'dots-color-b')
+        self.dots_r = props[('style', 'dots-color-r')]
+        self.dots_g = props[('style', 'dots-color-g')]
+        self.dots_b = props[('style', 'dots-color-b')]
         color = wx.Color(int(self.dots_r), int(self.dots_g), int(self.dots_b))
         DotsColorCtrl = xrc.XRCCTRL(self, u'DotsColor')
         DotsColorCtrl.SetColour(color)
-        width = props.GetProperty('style', 'line-width')
+        width = props[('style', 'line-width')]
         xrc.XRCCTRL(self, u'LineWidth').SetValue(int(width))
         LineColorCtrl = xrc.XRCCTRL(self, u'LineColor')
-        self.line_r = props.GetProperty('style', 'line-color-r')
-        self.line_g = props.GetProperty('style', 'line-color-g')
-        self.line_b = props.GetProperty('style', 'line-color-b')
+        self.line_r = props[('style', 'line-color-r')]
+        self.line_g = props[('style', 'line-color-g')]
+        self.line_b = props[('style', 'line-color-b')]
         color = wx.Color(int(self.line_r), int(self.line_g), int(self.line_b))
         LineColorCtrl.SetColour(color)
-        font = xrc.XRCCTRL(self, u'LabelFontStyle').GetFont()
-        font.SetEncoding(int(props.GetProperty(u'results', u'encoding')))
-        font.SetFaceName(props.GetProperty(u'results', u'face'))
-        font.SetFamily(int(props.GetProperty(u'results', u'family')))
-        font.SetPointSize(int(props.GetProperty(u'results', u'point-size')))
-        font.SetStyle(int(props.GetProperty(u'results', u'style')))
-        font.SetUnderlined(bool(props.GetProperty(u'results', u'underlined')))
-        font.SetWeight(int(props.GetProperty(u'results', u'weight')))
-        xrc.XRCCTRL(self, u'LabelFontStyle').SetFont(font)
+        font = xrc.XRCCTRL(self, u'LabelResultsFontStyle').GetFont()
+        font.SetEncoding(int(props[(u'results', u'encoding')]))
+        font.SetFaceName(props[(u'results', u'face')])
+        font.SetFamily(int(props[(u'results', u'family')]))
+        font.SetPointSize(int(props[(u'results', u'point-size')]))
+        font.SetStyle(int(props[(u'results', u'style')]))
+        font.SetUnderlined(bool(props[(u'results', u'underlined')]))
+        font.SetWeight(int(props[(u'results', u'weight')]))
+        xrc.XRCCTRL(self, u'LabelResultsFontStyle').SetFont(font)
         self.newFont = font
-        xrc.XRCCTRL(self, u'ButtonFontStyle').Bind(wx.EVT_LEFT_UP, self.SelectNewFont)
+        xrc.XRCCTRL(self, u'ButtonResultsFontStyle').Bind(wx.EVT_LEFT_UP, self.SelectNewFont)
         if self.ShowModal() == wx.ID_OK:
             self.dots_r = DotsColorCtrl.GetColour().Red()
             self.dots_g = DotsColorCtrl.GetColour().Green()
             self.dots_b = DotsColorCtrl.GetColour().Blue()
-            props.SetProperty('style', 'dots-color-r', self.dots_r)
-            props.SetProperty('style', 'dots-color-g', self.dots_g)
-            props.SetProperty('style', 'dots-color-b', self.dots_b)
+            props[('style', 'dots-color-r')] = self.dots_r
+            props[('style', 'dots-color-g')] = self.dots_g
+            props[('style', 'dots-color-b')] = self.dots_b
             radius = xrc.XRCCTRL(self, u'DotsRadius').GetValue()
             self.line_r = LineColorCtrl.GetColour().Red()
             self.line_g = LineColorCtrl.GetColour().Green()
             self.line_b = LineColorCtrl.GetColour().Blue()
-            props.SetProperty('style', 'dots-radius', radius)
-            props.SetProperty('style', 'line-color-r', self.line_r)
-            props.SetProperty('style', 'line-color-g', self.line_g)
-            props.SetProperty('style', 'line-color-b', self.line_b)
+            props[('style', 'dots-radius')] = radius
+            props[('style', 'line-color-r')] = self.line_r
+            props[('style', 'line-color-g')] = self.line_g
+            props[('style', 'line-color-b')] = self.line_b
             width = xrc.XRCCTRL(self, u'LineWidth').GetValue()
-            props.SetProperty('style', 'line-width', width)
-            props.SetProperty(u'results', u'encoding', self.newFont.GetEncoding())
-            props.SetProperty(u'results', u'face', self.newFont.GetFaceName())
-            props.SetProperty(u'results', u'family', self.newFont.GetFamily())
-            props.SetProperty(u'results', u'point-size', self.newFont.GetPointSize())
-            props.SetProperty(u'results', u'style', self.newFont.GetStyle())
-            props.SetProperty(u'results', u'underlined', self.newFont.GetUnderlined())
-            props.SetProperty(u'results', u'weight', self.newFont.GetWeight())
+            props[('style', 'line-width')] = width
+            props[(u'results', u'encoding')] = self.newFont.GetEncoding()
+            props[(u'results', u'face')] = self.newFont.GetFaceName()
+            props[(u'results', u'family')] = self.newFont.GetFamily()
+            props[(u'results', u'point-size')] = self.newFont.GetPointSize()
+            props[(u'results', u'style')] = self.newFont.GetStyle()
+            props[(u'results', u'underlined')] = self.newFont.GetUnderlined()
+            props[(u'results', u'weight')] = self.newFont.GetWeight()
             props.Save()
 
     def SelectNewFont(self, e):
             Data = wx.FontData()
-            Data.SetInitialFont(xrc.XRCCTRL(self, u'LabelFontStyle').GetFont())
+            Data.SetInitialFont(xrc.XRCCTRL(self, u'LabelResultsFontStyle').GetFont())
             Dialog = wx.FontDialog(self, Data)
             if Dialog.ShowModal() == wx.ID_OK:
                 self.newFont = Dialog.GetFontData().GetChosenFont()
-                xrc.XRCCTRL(self, u'LabelFontStyle').SetFont(self.newFont)
+                xrc.XRCCTRL(self, u'LabelResultsFontStyle').SetFont(self.newFont)
             Dialog.Destroy()

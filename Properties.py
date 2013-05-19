@@ -28,13 +28,13 @@ class XMLProperties:
         except AttributeError:
             return False
 
-    def GetProperty(self, component, name):
+    def __getitem__(self, (component, name)):
         try:
             return self.root.findtext('component[@id="' + component + '"]/' + name)
         except AttributeError:
             return False
 
-    def SetProperty(self, component, name, value):
+    def __setitem__(self, (component, name), value):
         try:
             node = self.root.find('component[@id="' + component + '"]/' + name)
             node.text = format(value)
@@ -46,6 +46,7 @@ class XMLProperties:
 if __name__ == '__main__':
     x = XMLProperties()
     x.Open("properties.xml")
-    print x.GetProperty(u'main-window', u'x-size')
-    print 'Property: ', x.SetProperty(u'main-window', u'x-size', 342).text
-    x.Save("properties2.xml")
+    print x[(u'main-window', u'x-size')]
+    x[(u'main-window', u'x-size')] = 342
+    print 'Property: ', x[u'main-window', u'x-size']
+    # x.Save("properties2.xml")

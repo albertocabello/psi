@@ -36,14 +36,14 @@ class PSI(wx.App):
         aboutDialog = self.res.LoadDialog(self.frame, u'AboutDialog')
         self.frame.Bind(wx.EVT_MENU, lambda x: aboutDialog.ShowModal(),
                                 id = xrc.XRCID(u'About'))
-        self.frame.SetDimensions(int(self.props.GetProperty(u'main-window',
-                                                            u'x-position')),
-                                 int(self.props.GetProperty(u'main-window',
-                                                            u'y-position')),
-                                 int(self.props.GetProperty(u'main-window',
-                                                            u'x-size')),
-                                 int(self.props.GetProperty(u'main-window',
-                                                            u'y-size')))
+        self.frame.SetDimensions(int(self.props[(u'main-window',
+                                                 u'x-position')]),
+                                 int(self.props[(u'main-window',
+                                                 u'y-position')]),
+                                 int(self.props[(u'main-window',
+                                                 u'x-size')]),
+                                 int(self.props[(u'main-window',
+                                                 u'y-size')]))
         self.frame.Show()
         self.results = PSIui.Result(self.frame, self.props)
         self.ResultText = xrc.XRCCTRL(self.results, u'ResultText')
@@ -64,11 +64,11 @@ class PSI(wx.App):
     def Close(self, e):
         print 'Closing application...'
         (x, y) = self.frame.GetPosition()
-        self.props.SetProperty(u'main-window', u'x-position', x)
-        self.props.SetProperty(u'main-window', u'y-position', y)
+        self.props[(u'main-window', u'x-position')] = x
+        self.props[(u'main-window', u'y-position')] = y
         (w, h) = self.frame.GetSize()
-        self.props.SetProperty(u'main-window', u'x-size', w)
-        self.props.SetProperty(u'main-window', u'y-size', h)
+        self.props[(u'main-window', u'x-size')] = w
+        self.props[(u'main-window', u'y-size')] = h
         self.props.Save()
         try:
             self.results.Close(False)

@@ -45,31 +45,36 @@ class ResultGraph(wx.ScrolledWindow):
         radius = self.style['dots-radius']
         dc.SetPen(wx.Pen(color, 1))
         dc.SetBrush(wx.Brush(color))
+        dc.DrawText(u'{0}, {1}'.format(x, y), x, y)
         dc.DrawCircle(x, y, radius)
 
-    def DrawGrid(self, color = 'black', width = 2, ticks = '10'):
+    def DrawGrid(self, color = 'black', width = 1,
+                 x_ticks = '10', y_ticks = '10'):
         dc = self.Init()
         dc.Clear()
         dc.SetPen(wx.Pen(color, width))
         width = self.size[0] - 2*self.margin[0]
         height = self.size[1] - 2*self.margin[1]
         dc.DrawRectangle(self.margin[0], self.margin[1], width, height)
-        if ticks > 0:
-            for i in range(30, self.size[1] - self.margin[1], 50):
-                dc.DrawLine(20, i, 24, i)
+        if x_ticks > 0:
             for i in range(20, self.size[0] - self.margin[0], 50):
                 dc.DrawLine(i, self.size[1] - self.margin[1],
                             i, self.size[1] - self.margin[1] + 5)
+        if y_ticks > 0:
+            for i in range(30, self.size[1] - self.margin[1], 50):
+                dc.DrawLine(self.margin[0] - 5, i, self.margin[0], i)
 
     def DrawLine(self, x0, y0, x1, y1, color = 'black', width = 1):
         dc = self.Init()
         dc.SetPen(wx.Pen(color, width))
         dc.DrawLine(x0, y0, x1, y1)
 
-    def DrawPoint(self, x, y):
+    def DrawPoint(self, x, y, color = None, radius = None):
         dc = self.Init()
-        color = self.style['dots-color']
-        radius = self.style['dots-radius']
+        if color == None:
+            color = self.style['dots-color']
+        if radius == None:
+            radius = self.style['dots-radius']
         dc.SetPen(wx.Pen(color, 1))
         if radius == 0:
             dc.DrawPoint(x, y)
@@ -83,7 +88,6 @@ class ResultGraph(wx.ScrolledWindow):
                 (width - 2*self.margin[0])/(self.maxX - self.minX))
         y = int(2*self.margin[1] + (float(point[1]) - self.minY)*
                 (height - 2*self.margin[1])/(self.maxY - self.minY))
-        print x, y
         self.DrawPoint(x, y)
 
     def PlotXYData(self, data):
@@ -111,17 +115,17 @@ class Style:
 
     def __init__(self, properties):
         self.style = {}
-        r = int(properties.GetProperty('style', 'dots-color-r'))
-        g = int(properties.GetProperty('style', 'dots-color-g'))
-        b = int(properties.GetProperty('style', 'dots-color-b'))
+        r = int(properties[('style', 'dots-color-r')])
+        g = int(properties[('style', 'dots-color-g')])
+        b = int(properties[('style', 'dots-color-b')])
         self.style['dots-color'] = wx.Color(r, g, b)
-        radius = int(properties.GetProperty('style', 'dots-radius'))
+        radius = int(properties[('style', 'dots-radius')])
         self.style['dots-radius'] = radius
-        r = int(properties.GetProperty('style', 'line-color-r'))
-        g = int(properties.GetProperty('style', 'line-color-g'))
-        b = int(properties.GetProperty('style', 'line-color-b'))
+        r = int(properties[('style', 'line-color-r')])
+        g = int(properties[('style', 'line-color-g')])
+        b = int(properties[('style', 'line-color-b')])
         self.style['line-color'] = wx.Color(r, g, b)
-        width = int(properties.GetProperty('style', 'line-width'))
+        width = int(properties[('style', 'line-width')])
         self.style['line-width'] = width
 
     def __getitem__(self, name):
