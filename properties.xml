@@ -1,0 +1,38 @@
+<properties>
+<component id="main-window">
+<x-size>600</x-size>
+<y-size>551</y-size>
+<x-position>12</x-position>
+<y-position>9</y-position>
+</component>
+<component id="results">
+<x-size>541</x-size>
+<y-size>651</y-size>
+<x-position>478</x-position>
+<y-position>9</y-position>
+<text-encoding>41</text-encoding>
+<text-face>Serif</text-face>
+<text-family>72</text-family>
+<text-point-size>11</text-point-size>
+<text-style>90</text-style>
+<text-underlined>False</text-underlined>
+<text-weight>90</text-weight>
+<graph-encoding>41</graph-encoding>
+<graph-face>TlwgTypewriter</graph-face>
+<graph-family>77</graph-family>
+<graph-point-size>9</graph-point-size>
+<graph-style>94</graph-style>
+<graph-underlined>True</graph-underlined>
+<graph-weight>90</graph-weight>
+</component>
+<component id="style">
+<dots-color-r>121</dots-color-r>
+<dots-color-g>191</dots-color-g>
+<dots-color-b>31</dots-color-b>
+<dots-radius>3</dots-radius>
+<line-color-r>253</line-color-r>
+<line-color-g>139</line-color-g>
+<line-color-b>41</line-color-b>
+<line-width>2</line-width>
+</component>
+</properties>
