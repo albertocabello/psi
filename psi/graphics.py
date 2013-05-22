@@ -9,7 +9,7 @@ class ResultGraph(wx.ScrolledWindow):
 
     def __init__(self):
         pre = wx.PreScrolledWindow()
-        res = xrc.XmlResource(u'mainGrid.xrc')
+        res = xrc.XmlResource(u'main_grid.xrc')
         self.pos = (0, 0)
         self.margin = (10, 10)
         self.size = (450, 450)
@@ -46,7 +46,7 @@ class ResultGraph(wx.ScrolledWindow):
         dc.SetPen(wx.Pen(color, 1))
         dc.SetBrush(wx.Brush(color))
         dc.SetFont(self.GetFont())
-        dc.DrawText(u'{0}, {1}'.format(x, y), x, y)
+        # dc.DrawText(u'{0}, {1}'.format(x, y), x, y)
         dc.DrawCircle(x, y, radius)
 
     def DrawGrid(self, color = 'black', width = 1,

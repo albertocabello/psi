@@ -4,7 +4,7 @@
 import wx
 from wx import grid
 from wx import xrc
-import Graphics
+import graphics
 
 
 class DataGrid (wx.grid.Grid):
@@ -91,7 +91,7 @@ class DataGrid (wx.grid.Grid):
 class Result (wx.Frame):
 
     def __init__(self, parent, props):
-        self.Res = xrc.XmlResource(u'mainGrid.xrc')
+        self.Res = xrc.XmlResource(u'main_grid.xrc')
         Pre = wx.PreFrame()
         self.Res.LoadOnFrame(Pre, parent, u'ResultFrame')
         self.PostCreate(Pre)
@@ -100,7 +100,9 @@ class Result (wx.Frame):
                            int(props[(u'results', u'y-position')]),
                            int(props[(u'results', u'x-size')]),
                            int(props[(u'results', u'y-size')]))
-        font = xrc.XRCCTRL(self, u'ResultText').GetFont()
+        self.text = xrc.XRCCTRL(self, u'ResultText')
+        self.graph = xrc.XRCCTRL(self, u'ResultGraph')
+        font = self.text.GetFont()
         font.SetEncoding(int(props[(u'results', u'text-encoding')]))
         font.SetFaceName(props[(u'results', u'text-face')])
         font.SetFamily(int(props[(u'results', u'text-family')]))
@@ -108,8 +110,8 @@ class Result (wx.Frame):
         font.SetStyle(int(props[(u'results', u'text-style')]))
         font.SetUnderlined(bool(props[(u'results', u'text-underlined')]))
         font.SetWeight(int(props[(u'results', u'text-weight')]))
-        xrc.XRCCTRL(self, u'ResultText').SetFont(font)
-        font = xrc.XRCCTRL(self, u'ResultGraph').GetFont()
+        self.text.SetFont(font)
+        font = self.graph.GetFont()
         font.SetEncoding(int(props[(u'results', u'graph-encoding')]))
         font.SetFaceName(props[(u'results', u'graph-face')])
         font.SetFamily(int(props[(u'results', u'graph-family')]))
@@ -117,8 +119,8 @@ class Result (wx.Frame):
         font.SetStyle(int(props[(u'results', u'graph-style')]))
         font.SetUnderlined(bool(props[(u'results', u'graph-underlined')]))
         font.SetWeight(int(props[(u'results', u'graph-weight')]))
-        xrc.XRCCTRL(self, u'ResultGraph').SetStyle(Graphics.Style(props))
-        xrc.XRCCTRL(self, u'ResultGraph').SetFont(font)
+        self.graph.SetStyle(graphics.Style(props))
+        self.graph.SetFont(font)
         xrc.XRCCTRL(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
 
     def Close(self, event):
@@ -135,7 +137,7 @@ class Result (wx.Frame):
 class StyleDialog(wx.Dialog):
 
     def __init__(self, parent, props):
-        self.res = xrc.XmlResource(u'mainGrid.xrc')
+        self.res = xrc.XmlResource(u'main_grid.xrc')
         pre = wx.PreDialog()
         self.res.LoadOnDialog(pre, parent, u'StyleDialog')
         self.PostCreate(pre)
@@ -145,18 +147,21 @@ class StyleDialog(wx.Dialog):
         self.dots_g = props[('style', 'dots-color-g')]
         self.dots_b = props[('style', 'dots-color-b')]
         color = wx.Color(int(self.dots_r), int(self.dots_g), int(self.dots_b))
-        DotsColorCtrl = xrc.XRCCTRL(self, u'DotsColor')
-        DotsColorCtrl.SetColour(color)
+        dots_color_ctrl = xrc.XRCCTRL(self, u'DotsColor')
+        dots_color_ctrl.SetColour(color)
         width = props[('style', 'line-width')]
         xrc.XRCCTRL(self, u'LineWidth').SetValue(int(width))
-        LineColorCtrl = xrc.XRCCTRL(self, u'LineColor')
+        line_color_ctrl = xrc.XRCCTRL(self, u'LineColor')
         self.line_r = props[('style', 'line-color-r')]
         self.line_g = props[('style', 'line-color-g')]
         self.line_b = props[('style', 'line-color-b')]
         color = wx.Color(int(self.line_r), int(self.line_g), int(self.line_b))
-        LineColorCtrl.SetColour(color)
-        self.ResultTextLabel = xrc.XRCCTRL(self, u'LabelResultsFontStyle')
-        font = self.ResultTextLabel.GetFont()
+        line_color_ctrl.SetColour(color)
+        self.result_text_label = xrc.XRCCTRL(self, u'LabelResultsFontStyle')
+        self.graph_text_label = xrc.XRCCTRL(self, u'LabelGraphFontStyle')
+        self.result_text_button = xrc.XRCCTRL(self, u'ButtonResultsFontStyle')
+        self.graph_text_button = xrc.XRCCTRL(self, u'ButtonGraphFontStyle')
+        font = self.result_text_label.GetFont()
         font.SetEncoding(int(props[(u'results', u'text-encoding')]))
         font.SetFaceName(props[(u'results', u'text-face')])
         font.SetFamily(int(props[(u'results', u'text-family')]))
@@ -164,9 +169,8 @@ class StyleDialog(wx.Dialog):
         font.SetStyle(int(props[(u'results', u'text-style')]))
         font.SetUnderlined(bool(props[(u'results', u'text-underlined')]))
         font.SetWeight(int(props[(u'results', u'text-weight')]))
-        self.ResultTextLabel.SetFont(font)
-        self.GraphTextLabel = xrc.XRCCTRL(self, u'LabelGraphFontStyle')
-        font = self.GraphTextLabel.GetFont()
+        self.result_text_label.SetFont(font)
+        font = self.graph_text_label.GetFont()
         font.SetEncoding(int(props[(u'results', u'graph-encoding')]))
         font.SetFaceName(props[(u'results', u'graph-face')])
         font.SetFamily(int(props[(u'results', u'graph-family')]))
@@ -174,29 +178,29 @@ class StyleDialog(wx.Dialog):
         font.SetStyle(int(props[(u'results', u'graph-style')]))
         font.SetUnderlined(bool(props[(u'results', u'graph-underlined')]))
         font.SetWeight(int(props[(u'results', u'graph-weight')]))
-        self.GraphTextLabel.SetFont(font)
-        xrc.XRCCTRL(self, u'ButtonResultsFontStyle').Bind(wx.EVT_LEFT_UP,
-            lambda x: self.SelectNewFont(x, label = u'LabelResultsFontStyle'))
-        xrc.XRCCTRL(self, u'ButtonGraphFontStyle').Bind(wx.EVT_LEFT_UP,
-            lambda x: self.SelectNewFont(x, label = u'LabelGraphFontStyle'))
+        self.graph_text_label.SetFont(font)
+        self.result_text_button.Bind(wx.EVT_LEFT_UP,
+            lambda x: self.SelectNewFont(x, label = self.result_text_label))
+        self.graph_text_button.Bind(wx.EVT_LEFT_UP,
+            lambda x: self.SelectNewFont(x, label = self.graph_text_label))
         if self.ShowModal() == wx.ID_OK:
-            self.dots_r = DotsColorCtrl.GetColour().Red()
-            self.dots_g = DotsColorCtrl.GetColour().Green()
-            self.dots_b = DotsColorCtrl.GetColour().Blue()
+            self.dots_r = dots_color_ctrl.GetColour().Red()
+            self.dots_g = dots_color_ctrl.GetColour().Green()
+            self.dots_b = dots_color_ctrl.GetColour().Blue()
             props[('style', 'dots-color-r')] = self.dots_r
             props[('style', 'dots-color-g')] = self.dots_g
             props[('style', 'dots-color-b')] = self.dots_b
             radius = xrc.XRCCTRL(self, u'DotsRadius').GetValue()
-            self.line_r = LineColorCtrl.GetColour().Red()
-            self.line_g = LineColorCtrl.GetColour().Green()
-            self.line_b = LineColorCtrl.GetColour().Blue()
+            self.line_r = line_color_ctrl.GetColour().Red()
+            self.line_g = line_color_ctrl.GetColour().Green()
+            self.line_b = line_color_ctrl.GetColour().Blue()
             props[('style', 'dots-radius')] = radius
             props[('style', 'line-color-r')] = self.line_r
             props[('style', 'line-color-g')] = self.line_g
             props[('style', 'line-color-b')] = self.line_b
             width = xrc.XRCCTRL(self, u'LineWidth').GetValue()
             props[('style', 'line-width')] = width
-            font = xrc.XRCCTRL(self, u'LabelResultsFontStyle').GetFont()
+            font = self.result_text_label.GetFont()
             props[(u'results', u'text-encoding')] = font.GetEncoding()
             props[(u'results', u'text-face')] = font.GetFaceName()
             props[(u'results', u'text-family')] = font.GetFamily()
@@ -204,7 +208,7 @@ class StyleDialog(wx.Dialog):
             props[(u'results', u'text-style')] = font.GetStyle()
             props[(u'results', u'text-underlined')] = font.GetUnderlined()
             props[(u'results', u'text-weight')] = font.GetWeight()
-            font = xrc.XRCCTRL(self, u'LabelGraphFontStyle').GetFont()
+            font = self.graph_text_label.GetFont()
             props[(u'results', u'graph-encoding')] = font.GetEncoding()
             props[(u'results', u'graph-face')] = font.GetFaceName()
             props[(u'results', u'graph-family')] = font.GetFamily()
@@ -215,10 +219,10 @@ class StyleDialog(wx.Dialog):
             props.Save()
 
     def SelectNewFont(self, e, label):
-            Data = wx.FontData()
-            Data.SetInitialFont(xrc.XRCCTRL(self, label).GetFont())
-            Dialog = wx.FontDialog(self, Data)
-            if Dialog.ShowModal() == wx.ID_OK:
-                newFont = Dialog.GetFontData().GetChosenFont()
-                xrc.XRCCTRL(self, label).SetFont(newFont)
-            Dialog.Destroy()
+            data = wx.FontData()
+            data.SetInitialFont(label.GetFont())
+            dialog = wx.FontDialog(self, data)
+            if dialog.ShowModal() == wx.ID_OK:
+                newFont = dialog.GetFontData().GetChosenFont()
+                label.SetFont(newFont)
+            dialog.Destroy()
