@@ -2,14 +2,13 @@
 #coding=utf-8
 
 import wx
-from wx import xrc
 
 
 class ResultGraph(wx.ScrolledWindow):
 
     def __init__(self):
         pre = wx.PreScrolledWindow()
-        res = xrc.XmlResource(u'main_grid.xrc')
+        res = wx.xrc.XmlResource(u'main_grid.xrc')
         self.pos = (0, 0)
         self.margin = (10, 10)
         self.size = (450, 450)

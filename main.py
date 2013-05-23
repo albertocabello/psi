@@ -1,9 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-import wx
-from wx import xrc
-from wx import grid
+import wx.xrc
 from psi import analysis
 from psi import graphics
 import psi.properties_manager as pm
@@ -15,27 +13,8 @@ class PSI(wx.App):
     def OnInit(self):
         self.props = pm.XMLProperties()
         self.props.Open('properties.xml')
-        self.res = xrc.XmlResource(u'main_grid.xrc')
+        self.res = wx.xrc.XmlResource(u'main_grid.xrc')
         self.frame = self.res.LoadFrame(None, u'MainFrame')
-        self.main_grid = xrc.XRCCTRL(self.frame, u'MainGrid')
-        self.main_grid.CreateGrid(1000, 26)
-        self.main_grid.EnableDragRowSize(False)
-        self.main_grid.EnableDragColSize(False)
-        self.frame.Bind(wx.EVT_MENU, self.PrintSelectedCells,
-                        id = xrc.XRCID(u'Print'))
-        self.frame.Bind(wx.EVT_MENU, self.Close,
-                        id = xrc.XRCID(u'Quit'))
-        self.frame.Bind(wx.EVT_MENU, self.OpenFile,
-                        id = xrc.XRCID(u'Open'))
-        self.frame.Bind(wx.EVT_MENU, self.ShowStyleDialog,
-                                id = xrc.XRCID(u'DrawingStyle'))
-        self.frame.Bind(wx.EVT_MENU, self.LR,
-                                id = xrc.XRCID(u'LR'))
-        self.frame.Bind(wx.EVT_MENU, self.Descriptive,
-                                id = xrc.XRCID(u'DescStats'))
-        aboutDialog = self.res.LoadDialog(self.frame, u'AboutDialog')
-        self.frame.Bind(wx.EVT_MENU, lambda x: aboutDialog.ShowModal(),
-                                id = xrc.XRCID(u'About'))
         self.frame.SetDimensions(int(self.props[(u'main-window',
                                                  u'x-position')]),
                                  int(self.props[(u'main-window',
@@ -44,10 +23,27 @@ class PSI(wx.App):
                                                  u'x-size')]),
                                  int(self.props[(u'main-window',
                                                  u'y-size')]))
+        self.main_grid = ui.ctrl(self.frame, u'MainGrid')
+        self.main_grid.CreateGrid(1000, 26)
+        self.main_grid.EnableDragRowSize(False)
+        self.main_grid.EnableDragColSize(False)
+        self.frame.Bind(wx.EVT_MENU, self.PrintSelectedCells,
+                            id=wx.xrc.XRCID(u'Print'))
+        self.frame.Bind(wx.EVT_MENU, self.Close,
+                            id=wx.xrc.XRCID(u'Quit'))
+        self.frame.Bind(wx.EVT_MENU, self.OpenFile,
+                            id=wx.xrc.XRCID(u'Open'))
+        self.frame.Bind(wx.EVT_MENU, self.ShowStyleDialog,
+                            id=wx.xrc.XRCID(u'DrawingStyle'))
+        self.frame.Bind(wx.EVT_MENU, self.LinearRegression,
+                            id=wx.xrc.XRCID(u'LR'))
+        self.frame.Bind(wx.EVT_MENU, self.BasicStatistics,
+                            id=wx.xrc.XRCID(u'DescStats'))
+        aboutDialog = self.res.LoadDialog(self.frame, u'AboutDialog')
+        self.frame.Bind(wx.EVT_MENU, lambda x: aboutDialog.ShowModal(),
+                            id=wx.xrc.XRCID(u'About'))
         self.frame.Show()
         self.result = ui.Result(self.frame, self.props)
-        # self.result.text = xrc.XRCCTRL(self.results, u'ResultText')
-        # self.result.graph = xrc.XRCCTRL(self.results, u'ResultGraph')
         self.result.Show()
         return True
 
@@ -75,7 +71,7 @@ class PSI(wx.App):
             self.results.Close(False)
         except:
             # Results window could have been closed before
-            None
+            pass
         self.frame.Close(False)
 
     def OpenFile(self, e):
@@ -94,23 +90,23 @@ class PSI(wx.App):
                                       separator = sv.GetStringSelection())
                 sv.Destroy()
 
-    def LR(self, e):
+    def LinearRegression(self, e):
         analyst = analysis.LinearRegression()
         if analyst.LoadData(self.main_grid.GetSelectedCellsList('N')):
-            self.result.text.Clear()
             if analyst.Calculate():
+                self.result.text.Clear()
                 analyst.PrintResult(self.result.text)
-                self.result.graph.DrawGrid()
-                style = graphics.Style(self.props)
-                analyst.DoDrawing(self.result.graph, style)
-                self.result.Show()
+                analyst.DoDrawing(self.result.graph,
+                                    graphics.Style(self.props))
 
-    def Descriptive(self, e):
+    def BasicStatistics(self, e):
         analyst = analysis.BasicStatistics()
         if analyst.LoadData(self.main_grid.GetSelectedCellsList('N')):
-            self.result.text.Clear()
             if analyst.Calculate():
+                self.result.text.Clear()
                 analyst.PrintResult(self.result.text)
+                analyst.DoDrawing(self.result.graph,
+                                    graphics.Style(self.props))
 
 if __name__ == '__main__':
     app = PSI(False)

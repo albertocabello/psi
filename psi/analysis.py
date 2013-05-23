@@ -8,9 +8,6 @@ import math
 
 class BasicStatistics:
 
-    def __init__(self):
-        print u'Calculating basic parameters...'
-
     def LoadData(self, data):
         self.data = data
         for value in self.data:
@@ -40,11 +37,11 @@ class BasicStatistics:
         text.AppendText(u"Standard deviation: {0}\n".format(self.res['std']))
         text.AppendText(u"Variance: {0}\n".format(self.res['var']))
 
+    def DoDrawing(self, canvas, style):
+        pass
+
 
 class LinearRegression:
-
-    def __init__(self):
-        print u'Linear regression...'
 
     def LoadData(self, data):
         self.data = data
@@ -70,6 +67,7 @@ class LinearRegression:
         return True
 
     def DoDrawing(self, canvas, style):
+        canvas.DrawGrid()
         width = canvas.size[0] - 2*canvas.margin[0]
         height = canvas.size[1] - 2*canvas.margin[1]
         (min_x, max_x, min_y, max_y) = math.RangeN(self.data)

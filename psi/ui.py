@@ -1,17 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import wx
-from wx import grid
-from wx import xrc
+import wx.grid
 import graphics
+
+
+def ctrl(window, str_id):
+    return wx.xrc.XRCCTRL(window, str_id)
 
 
 class DataGrid (wx.grid.Grid):
 
     def __init__(self):
         # p = grid.PreGrid()
-        self.PostCreate(grid.PreGrid())
+        self.PostCreate(wx.grid.PreGrid())
         self.Bind(wx.EVT_WINDOW_CREATE, self.OnCreate)
 
     def OnCreate(self, evt):
@@ -91,7 +93,7 @@ class DataGrid (wx.grid.Grid):
 class Result (wx.Frame):
 
     def __init__(self, parent, props):
-        self.Res = xrc.XmlResource(u'main_grid.xrc')
+        self.Res = wx.xrc.XmlResource(u'main_grid.xrc')
         Pre = wx.PreFrame()
         self.Res.LoadOnFrame(Pre, parent, u'ResultFrame')
         self.PostCreate(Pre)
@@ -100,8 +102,8 @@ class Result (wx.Frame):
                            int(props[(u'results', u'y-position')]),
                            int(props[(u'results', u'x-size')]),
                            int(props[(u'results', u'y-size')]))
-        self.text = xrc.XRCCTRL(self, u'ResultText')
-        self.graph = xrc.XRCCTRL(self, u'ResultGraph')
+        self.text = ctrl(self, u'ResultText')
+        self.graph = ctrl(self, u'ResultGraph')
         font = self.text.GetFont()
         font.SetEncoding(int(props[(u'results', u'text-encoding')]))
         font.SetFaceName(props[(u'results', u'text-face')])
@@ -121,7 +123,7 @@ class Result (wx.Frame):
         font.SetWeight(int(props[(u'results', u'graph-weight')]))
         self.graph.SetStyle(graphics.Style(props))
         self.graph.SetFont(font)
-        xrc.XRCCTRL(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
+        ctrl(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
 
     def Close(self, event):
         (x, y) = self.GetPosition()
@@ -137,30 +139,30 @@ class Result (wx.Frame):
 class StyleDialog(wx.Dialog):
 
     def __init__(self, parent, props):
-        self.res = xrc.XmlResource(u'main_grid.xrc')
+        self.res = wx.xrc.XmlResource(u'main_grid.xrc')
         pre = wx.PreDialog()
         self.res.LoadOnDialog(pre, parent, u'StyleDialog')
         self.PostCreate(pre)
         radius = props[('style', 'dots-radius')]
-        xrc.XRCCTRL(self, u'DotsRadius').SetValue(int(radius))
+        ctrl(self, u'DotsRadius').SetValue(int(radius))
         self.dots_r = props[('style', 'dots-color-r')]
         self.dots_g = props[('style', 'dots-color-g')]
         self.dots_b = props[('style', 'dots-color-b')]
         color = wx.Color(int(self.dots_r), int(self.dots_g), int(self.dots_b))
-        dots_color_ctrl = xrc.XRCCTRL(self, u'DotsColor')
+        dots_color_ctrl = ctrl(self, u'DotsColor')
         dots_color_ctrl.SetColour(color)
         width = props[('style', 'line-width')]
-        xrc.XRCCTRL(self, u'LineWidth').SetValue(int(width))
-        line_color_ctrl = xrc.XRCCTRL(self, u'LineColor')
+        ctrl(self, u'LineWidth').SetValue(int(width))
+        line_color_ctrl = ctrl(self, u'LineColor')
         self.line_r = props[('style', 'line-color-r')]
         self.line_g = props[('style', 'line-color-g')]
         self.line_b = props[('style', 'line-color-b')]
         color = wx.Color(int(self.line_r), int(self.line_g), int(self.line_b))
         line_color_ctrl.SetColour(color)
-        self.result_text_label = xrc.XRCCTRL(self, u'LabelResultsFontStyle')
-        self.graph_text_label = xrc.XRCCTRL(self, u'LabelGraphFontStyle')
-        self.result_text_button = xrc.XRCCTRL(self, u'ButtonResultsFontStyle')
-        self.graph_text_button = xrc.XRCCTRL(self, u'ButtonGraphFontStyle')
+        self.result_text_label = ctrl(self, u'LabelResultsFontStyle')
+        self.graph_text_label = ctrl(self, u'LabelGraphFontStyle')
+        self.result_text_button = ctrl(self, u'ButtonResultsFontStyle')
+        self.graph_text_button = ctrl(self, u'ButtonGraphFontStyle')
         font = self.result_text_label.GetFont()
         font.SetEncoding(int(props[(u'results', u'text-encoding')]))
         font.SetFaceName(props[(u'results', u'text-face')])
@@ -190,7 +192,7 @@ class StyleDialog(wx.Dialog):
             props[('style', 'dots-color-r')] = self.dots_r
             props[('style', 'dots-color-g')] = self.dots_g
             props[('style', 'dots-color-b')] = self.dots_b
-            radius = xrc.XRCCTRL(self, u'DotsRadius').GetValue()
+            radius = ctrl(self, u'DotsRadius').GetValue()
             self.line_r = line_color_ctrl.GetColour().Red()
             self.line_g = line_color_ctrl.GetColour().Green()
             self.line_b = line_color_ctrl.GetColour().Blue()
@@ -198,7 +200,7 @@ class StyleDialog(wx.Dialog):
             props[('style', 'line-color-r')] = self.line_r
             props[('style', 'line-color-g')] = self.line_g
             props[('style', 'line-color-b')] = self.line_b
-            width = xrc.XRCCTRL(self, u'LineWidth').GetValue()
+            width = ctrl(self, u'LineWidth').GetValue()
             props[('style', 'line-width')] = width
             font = self.result_text_label.GetFont()
             props[(u'results', u'text-encoding')] = font.GetEncoding()

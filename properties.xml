@@ -15,7 +15,7 @@
 <text-family>74</text-family>
 <text-point-size>9</text-point-size>
 <text-style>90</text-style>
-<text-underlined>False</text-underlined>
+<text-underlined>True</text-underlined>
 <text-weight>92</text-weight>
 <graph-encoding>0</graph-encoding>
 <graph-face>sans</graph-face>
@@ -26,9 +26,9 @@
 <graph-weight>90</graph-weight>
 </component>
 <component id="style">
-<dots-color-r>71</dots-color-r>
-<dots-color-g>230</dots-color-g>
-<dots-color-b>244</dots-color-b>
+<dots-color-r>139</dots-color-r>
+<dots-color-g>205</dots-color-g>
+<dots-color-b>42</dots-color-b>
 <dots-radius>5</dots-radius>
 <line-color-r>253</line-color-r>
 <line-color-g>41</line-color-g>
