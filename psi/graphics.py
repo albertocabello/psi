@@ -44,7 +44,7 @@ class ResultGraph(wx.ScrolledWindow):
         radius = self.style['dots-radius']
         dc.SetPen(wx.Pen(color, 1))
         dc.SetBrush(wx.Brush(color))
-        dc.SetFont(self.GetFont())
+        # dc.SetFont(self.GetFont())
         # dc.DrawText(u'{0}, {1}'.format(x, y), x, y)
         dc.DrawCircle(x, y, radius)
 

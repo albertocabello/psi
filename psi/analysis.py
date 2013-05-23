@@ -38,7 +38,14 @@ class BasicStatistics:
         text.AppendText(u"Variance: {0}\n".format(self.res['var']))
 
     def DoDrawing(self, canvas, style):
-        pass
+        canvas.DrawGrid()        
+        data = numpy.sort(numpy.array(self.data, dtype=float))
+        canvas.SetDrawingArea(0, len(data), min(data), max(data))
+        width = canvas.size[0] - 2*canvas.margin[0]
+        height = canvas.size[1] - 2*canvas.margin[1]
+        canvas.SetStyle(style)
+        for i in range(0, len(data)):
+            canvas.PlotXY((i, data[i]))
 
 
 class LinearRegression:
