@@ -36,9 +36,11 @@ class PSI(wx.App):
         self.frame.Bind(wx.EVT_MENU, self.ShowStyleDialog,
                             id=wx.xrc.XRCID(u'DrawingStyle'))
         self.frame.Bind(wx.EVT_MENU, self.LinearRegression,
-                            id=wx.xrc.XRCID(u'LR'))
+                            id=wx.xrc.XRCID(u'LinReg'))
         self.frame.Bind(wx.EVT_MENU, self.BasicStatistics,
                             id=wx.xrc.XRCID(u'DescStats'))
+        self.frame.Bind(wx.EVT_MENU, self.HeatMap,
+                            id=wx.xrc.XRCID(u'HeatMap'))
         aboutDialog = self.res.LoadDialog(self.frame, u'AboutDialog')
         self.frame.Bind(wx.EVT_MENU, lambda x: aboutDialog.ShowModal(),
                             id=wx.xrc.XRCID(u'About'))
@@ -101,6 +103,15 @@ class PSI(wx.App):
 
     def BasicStatistics(self, e):
         analyst = analysis.BasicStatistics()
+        if analyst.LoadData(self.main_grid.GetSelectedCellsList('N')):
+            if analyst.Calculate():
+                self.result.text.Clear()
+                analyst.PrintResult(self.result.text)
+                analyst.DoDrawing(self.result.graph,
+                                    graphics.Style(self.props))
+
+    def HeatMap(self, e):
+        analyst = analysis.HeatMap()
         if analyst.LoadData(self.main_grid.GetSelectedCellsList('N')):
             if analyst.Calculate():
                 self.result.text.Clear()

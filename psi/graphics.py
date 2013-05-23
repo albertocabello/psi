@@ -38,18 +38,17 @@ class ResultGraph(wx.ScrolledWindow):
         dc = self.Init()
         self.Show()
 
-    def DrawCircle(self, x, y):
+    def DrawCircle(self, x, y, color=None, radius=None):
         dc = self.Init()
-        color = self.style['dots-color']
-        radius = self.style['dots-radius']
+        if color is None:
+            color = self.style['dots-color']
+        if radius is None:
+            radius = self.style['dots-radius']
         dc.SetPen(wx.Pen(color, 1))
         dc.SetBrush(wx.Brush(color))
-        # dc.SetFont(self.GetFont())
-        # dc.DrawText(u'{0}, {1}'.format(x, y), x, y)
         dc.DrawCircle(x, y, radius)
 
-    def DrawGrid(self, color = 'black', width = 1,
-                 x_ticks = '10', y_ticks = '10'):
+    def DrawGrid(self, color='black', width=1, x_ticks=10, y_ticks=10):
         dc = self.Init()
         dc.Clear()
         dc.SetPen(wx.Pen(color, width))
@@ -64,38 +63,41 @@ class ResultGraph(wx.ScrolledWindow):
             for i in range(30, self.size[1] - self.margin[1], 50):
                 dc.DrawLine(self.margin[0] - 5, i, self.margin[0], i)
 
-    def DrawLine(self, x0, y0, x1, y1, color = 'black', width = 1):
+    def DrawLine(self, x0, y0, x1, y1, color='black', width=1):
         dc = self.Init()
         dc.SetPen(wx.Pen(color, width))
         dc.DrawLine(x0, y0, x1, y1)
 
-    def DrawPoint(self, x, y, color = None, radius = None):
+    def DrawPoint(self, x, y, color=None, radius=None, label=None):
         dc = self.Init()
-        if color == None:
+        if color is None:
             color = self.style['dots-color']
-        if radius == None:
+        if radius is None:
             radius = self.style['dots-radius']
         dc.SetPen(wx.Pen(color, 1))
+        if label is not None:
+            dc.SetFont(self.GetFont())
+            dc.DrawText(u'{0}, {1}'.format(x, y), x, y)
         if radius == 0:
             dc.DrawPoint(x, y)
         else:
-            self.DrawCircle(x, y)
+            self.DrawCircle(x, y, color=color, radius=radius)
 
-    def PlotXY(self, point):
+    def PlotXY(self, point, color=None, radius=None, label=None):
         width = self.size[0] - 2*self.margin[0]
         height = self.size[1] - 2*self.margin[1]
         x = int(2*self.margin[0] + (float(point[0]) - self.minX)*
                 (width - 2*self.margin[0])/(self.maxX - self.minX))
         y = int(2*self.margin[1] + (float(point[1]) - self.minY)*
                 (height - 2*self.margin[1])/(self.maxY - self.minY))
-        self.DrawPoint(x, y)
+        self.DrawPoint(x, y, color=color, radius=radius, label=label)
 
-    def PlotXYData(self, data):
+    def PlotXYData(self, data, color=None, radius=None, label=None):
         for i in range(0, len(data)/2):
             x = data[i]
             y = data[i + len(data)/2]
-            self.PlotXY((x, y))
-        self.PlotXY((x, y))
+            self.PlotXY((x, y), color=color, radius=radius, label=label)
+        self.PlotXY((x, y), color=color, radius=radius, label=label)
 
     def SetDrawingArea(self, left, right, top, bottom):
         self.minX = left

@@ -1,9 +1,10 @@
 #! /usr/bin/env python
 #coding=utf-8
 
-import scipy.stats
 import numpy
-import math
+import psi.math
+import scipy.stats
+import wx
 
 
 class BasicStatistics:
@@ -38,7 +39,7 @@ class BasicStatistics:
         text.AppendText(u"Variance: {0}\n".format(self.res['var']))
 
     def DoDrawing(self, canvas, style):
-        canvas.DrawGrid()        
+        canvas.DrawGrid(x_ticks=0)
         data = numpy.sort(numpy.array(self.data, dtype=float))
         canvas.SetDrawingArea(0, len(data), min(data), max(data))
         width = canvas.size[0] - 2*canvas.margin[0]
@@ -46,6 +47,56 @@ class BasicStatistics:
         canvas.SetStyle(style)
         for i in range(0, len(data)):
             canvas.PlotXY((i, data[i]))
+
+
+class HeatMap:
+
+    def LoadData(self, data):
+        self.data = data
+        self.size = len(self.data)
+        self.x_range = {}
+        self.y_range = {}
+        self.z_range = {}
+        if self.size % 3 != 0:
+            print "Error: bad sample size"
+            return False
+        for value in self.data:
+            try:
+                value = float(value)
+            except ValueError:
+                print "Error: bad value {0} ".format(value)
+                # return False
+        return True
+
+    def Calculate(self):
+        n = self.size/3
+        self.x_range[0] = min(numpy.array(self.data[:n], dtype = float))
+        self.x_range[1] = max(numpy.array(self.data[:n], dtype = float))
+        self.y_range[0] = min(numpy.array(self.data[n:n*2], dtype = float))
+        self.y_range[1] = max(numpy.array(self.data[n:n*2], dtype = float))
+        self.z_range[0] = min(numpy.array(self.data[n*2:], dtype = float))
+        self.z_range[1] = max(numpy.array(self.data[n*2:], dtype = float))
+        return True
+
+    def DoDrawing(self, canvas, style):
+        canvas.DrawGrid()
+        width = canvas.size[0] - 2*canvas.margin[0]
+        height = canvas.size[1] - 2*canvas.margin[1]
+        (min_x, max_x) = (self.x_range[0], self.x_range[1])
+        (min_y, max_y) = (self.y_range[0], self.y_range[1])
+        canvas.SetDrawingArea(min_x, max_x, min_y, max_y)
+        canvas.SetStyle(style)
+        for i in range(0, len(self.data)/3):
+            x = self.data[i]
+            y = self.data[i + len(self.data)/3]
+            z = float(self.data[i + 2*len(self.data)/3])
+            z_1 = (z - self.z_range[0])/(self.z_range[1] - self.z_range[0])
+            mapped_color = psi.math.RGYBMap(z_1)
+            color = wx.Color(mapped_color[0], mapped_color[1], mapped_color[2])
+            canvas.PlotXY((x, y), color=color)
+
+    def PrintResult(self, text):
+        pass
 
 
 class LinearRegression:

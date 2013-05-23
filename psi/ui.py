@@ -12,7 +12,6 @@ def ctrl(window, str_id):
 class DataGrid (wx.grid.Grid):
 
     def __init__(self):
-        # p = grid.PreGrid()
         self.PostCreate(wx.grid.PreGrid())
         self.Bind(wx.EVT_WINDOW_CREATE, self.OnCreate)
 
@@ -44,6 +43,17 @@ class DataGrid (wx.grid.Grid):
         Returns selected cells as an array of values ordered by rows
         (or by columns if orientation = 'N').
         """
+        # Here is how to manage multiple selection:
+        # try:
+        #     for i in range(0, len(self.GetSelectionBlockTopLeft())):
+        #         x1 = x0 = self.GetSelectionBlockTopLeft()[i][0]
+        #         y1 = y0 = self.GetSelectionBlockTopLeft()[i][1]
+        #         x1 = self.GetSelectionBlockBottomRight()[i][0]
+        #         y1 = self.GetSelectionBlockBottomRight()[i][1]
+        #         print u'({0}, {1}) -> ({2}, {3})'.format(x0, y0, x1, y1)
+        # except IndexError:
+        #     pass
+
         Cells = []
         try:
             y0 = x0 = self.GetSelectionBlockTopLeft()[0][0]
@@ -59,7 +69,7 @@ class DataGrid (wx.grid.Grid):
                     for i in range(x0, y0 + 1):
                         Cells.append(self.GetCellValue(i, j))
         except IndexError:
-            None
+            pass
         return Cells
 
     def GetSelectedCellsArray(self, orientation = 'Rows'):
