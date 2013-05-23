@@ -1,7 +1,7 @@
 <properties>
 <component id="main-window">
-<x-size>600</x-size>
-<y-size>551</y-size>
+<x-size>735</x-size>
+<y-size>691</y-size>
 <x-position>12</x-position>
 <y-position>9</y-position>
 </component>
@@ -11,24 +11,24 @@
 <x-position>478</x-position>
 <y-position>9</y-position>
 <text-encoding>41</text-encoding>
-<text-face>Serif</text-face>
-<text-family>72</text-family>
-<text-point-size>11</text-point-size>
+<text-face>Sans</text-face>
+<text-family>74</text-family>
+<text-point-size>9</text-point-size>
 <text-style>90</text-style>
-<text-underlined>True</text-underlined>
+<text-underlined>False</text-underlined>
 <text-weight>92</text-weight>
-<graph-encoding>41</graph-encoding>
-<graph-face>TlwgTypewriter</graph-face>
-<graph-family>77</graph-family>
+<graph-encoding>0</graph-encoding>
+<graph-face>sans</graph-face>
+<graph-family>74</graph-family>
 <graph-point-size>9</graph-point-size>
 <graph-style>90</graph-style>
 <graph-underlined>True</graph-underlined>
 <graph-weight>90</graph-weight>
 </component>
 <component id="style">
-<dots-color-r>183</dots-color-r>
-<dots-color-g>244</dots-color-g>
-<dots-color-b>71</dots-color-b>
+<dots-color-r>71</dots-color-r>
+<dots-color-g>230</dots-color-g>
+<dots-color-b>244</dots-color-b>
 <dots-radius>5</dots-radius>
 <line-color-r>253</line-color-r>
 <line-color-g>41</line-color-g>
