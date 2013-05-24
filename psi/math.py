@@ -4,7 +4,7 @@
 import numpy
 
 
-def RGYBMap(index):
+def RYGBMap(index):
     r = g = b = None
     if index >= 0 and index*255 <= 85:
         # r = 255, g from 0 to 255, b = 0
@@ -22,6 +22,20 @@ def RGYBMap(index):
         g = 255 * (3 - index*3)
         b = 255 - g
     return (r, g, b)
+
+
+def BGYRMap(index):
+    return RYGBMap(1 - index)
+
+
+def BWGreyMap(index):
+    val = index*255
+    return (val, val, val)
+
+
+def WBGreyMap(index):
+    val = 255 - index*255
+    return (val, val, val)
 
 
 def RangeN(data):

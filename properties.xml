@@ -1,7 +1,7 @@
 <properties>
 <component id="main-window">
-<x-size>582</x-size>
-<y-size>496</y-size>
+<x-size>456</x-size>
+<y-size>475</y-size>
 <x-position>8</x-position>
 <y-position>51</y-position>
 </component>
