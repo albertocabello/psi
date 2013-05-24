@@ -23,6 +23,7 @@ def RGYBMap(index):
         b = 255 - g
     return (r, g, b)
 
+
 def RangeN(data):
     MinX = min(numpy.array(data[:len(data)/2], dtype=float))
     MaxX = max(numpy.array(data[:len(data)/2], dtype=float))

@@ -1,9 +1,9 @@
 <properties>
 <component id="main-window">
-<x-size>697</x-size>
-<y-size>538</y-size>
-<x-position>12</x-position>
-<y-position>9</y-position>
+<x-size>582</x-size>
+<y-size>496</y-size>
+<x-position>8</x-position>
+<y-position>51</y-position>
 </component>
 <component id="results">
 <x-size>541</x-size>
@@ -29,7 +29,7 @@
 <dots-color-r>139</dots-color-r>
 <dots-color-g>205</dots-color-g>
 <dots-color-b>42</dots-color-b>
-<dots-radius>1</dots-radius>
+<dots-radius>2</dots-radius>
 <line-color-r>253</line-color-r>
 <line-color-g>41</line-color-g>
 <line-color-b>109</line-color-b>

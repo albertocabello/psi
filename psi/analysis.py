@@ -2,7 +2,7 @@
 #coding=utf-8
 
 import numpy
-import psi.math
+import math
 import scipy.stats
 import wx
 
@@ -84,16 +84,23 @@ class HeatMap:
         height = canvas.size[1] - 2*canvas.margin[1]
         (min_x, max_x) = (self.x_range[0], self.x_range[1])
         (min_y, max_y) = (self.y_range[0], self.y_range[1])
+        (min_z, max_z) = (self.z_range[0], self.z_range[1])
         canvas.SetDrawingArea(min_x, max_x, min_y, max_y)
         canvas.SetStyle(style)
+        dc = canvas.Init()
         for i in range(0, len(self.data)/3):
-            x = self.data[i]
-            y = self.data[i + len(self.data)/3]
+            x = float(self.data[i])
+            y = float(self.data[i + len(self.data)/3])
+            x = int(2*canvas.margin[0] + (x - min_x)*
+                    (width - 2*canvas.margin[0])/(max_x - min_x))
+            y = int(height - (y - min_y)*
+                    (height - 2*canvas.margin[1])/(max_y - min_y))
             z = float(self.data[i + 2*len(self.data)/3])
-            z_1 = (z - self.z_range[0])/(self.z_range[1] - self.z_range[0])
-            mapped_color = psi.math.RGYBMap(z_1)
+            mapped_color = math.RGYBMap((z - min_z)/(max_z - min_z))
             color = wx.Color(mapped_color[0], mapped_color[1], mapped_color[2])
-            canvas.PlotXY((x, y), color=color)
+            dc.SetPen(wx.Pen(color, 1))
+            dc.SetBrush(wx.Brush(color))
+            dc.DrawCircle(x, y, int(style['dots-radius']))
 
     def PrintResult(self, text):
         pass
