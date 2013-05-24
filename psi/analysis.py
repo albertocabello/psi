@@ -87,20 +87,24 @@ class HeatMap:
         (min_z, max_z) = (self.z_range[0], self.z_range[1])
         canvas.SetDrawingArea(min_x, max_x, min_y, max_y)
         canvas.SetStyle(style)
+        # canvas.DrawHeatMap(self.data,
+        # lambda x: math.RGYBMap((x - min_z)/(max_z - min_z)))
+        # return None
         dc = canvas.Init()
         for i in range(0, len(self.data)/3):
             x = float(self.data[i])
             y = float(self.data[i + len(self.data)/3])
             x = int(2*canvas.margin[0] + (x - min_x)*
                     (width - 2*canvas.margin[0])/(max_x - min_x))
-            y = int(height - (y - min_y)*
-                    (height - 2*canvas.margin[1])/(max_y - min_y))
+            y = int(2*canvas.margin[1] + (y - max_y)*
+                    (height - 2*canvas.margin[1])/(min_y - max_y))
             z = float(self.data[i + 2*len(self.data)/3])
             mapped_color = math.RGYBMap((z - min_z)/(max_z - min_z))
             color = wx.Color(mapped_color[0], mapped_color[1], mapped_color[2])
             dc.SetPen(wx.Pen(color, 1))
             dc.SetBrush(wx.Brush(color))
             dc.DrawCircle(x, y, int(style['dots-radius']))
+            print x, y
 
     def PrintResult(self, text):
         pass
