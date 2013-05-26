@@ -41,19 +41,19 @@ class BasicStatistics:
 
     def DoDrawing(self, canvas, style):
         data = numpy.sort(numpy.array(self.data, dtype=float))
+        indexes = range(1, len(self.data) + 1)
         canvas.Clear()
         canvas.axes = canvas.fig.add_subplot(111,
           xlim=(1, len(self.data)), ylim=(self.res['min'], self.res['max']))
-        line = matplotlib.lines.Line2D(
-          range(1, len(self.data) + 1), data, 2, '-', 'red')
+        line = matplotlib.lines.Line2D(indexes, data,
+          lw=int(style['line-width']), ls='-',
+          color=style['line-color'].GetAsString(wx.C2S_HTML_SYNTAX),
+          marker='o', ms=2*int(style['dots-radius']),
+          mfc=style['dots-color'].GetAsString(wx.C2S_HTML_SYNTAX),
+          mew=0)
         canvas.axes.add_line(line)
         canvas.Draw()
-        # canvas.SetDrawingArea(0, len(data), min(data), max(data))
-        # width = canvas.size[0] - 2*canvas.margin[0]
-        # height = canvas.size[1] - 2*canvas.margin[1]
-        # canvas.SetStyle(style)
-        # for i in range(0, len(data)):
-        #     canvas.PlotXY((i, data[i]))
+
 
 class HeatMap:
 
@@ -85,24 +85,25 @@ class HeatMap:
         return True
 
     def DoDrawing(self, canvas, style):
-        canvas.DrawGrid()
-        width = canvas.size[0] - 2*canvas.margin[0]
-        height = canvas.size[1] - 2*canvas.margin[1]
+        canvas.Clear()
         (min_x, max_x) = (self.x_range[0], self.x_range[1])
         (min_y, max_y) = (self.y_range[0], self.y_range[1])
         (min_z, max_z) = (self.z_range[0], self.z_range[1])
-        canvas.SetDrawingArea(min_x, max_x, min_y, max_y)
-        canvas.SetStyle(style)
-        radius =int(style['dots-radius'])
+        canvas.axes = canvas.fig.add_subplot(111,
+          xlim=(min_x, max_x), ylim=(min_y, max_y))
         for i in range(0, len(self.data)/3):
-            z = float(self.data[i + 2*len(self.data)/3])
             x = float(self.data[i])
             y = float(self.data[i + len(self.data)/3])
-            mapped_color = math.RYGBMap((z - min_z)/(max_z - min_z))
-            color = wx.Color(mapped_color[0], mapped_color[1], mapped_color[2])
-            canvas.PlotXY((x, y), color=color, radius=radius)
-        # canvas.Plot()
-        #
+            z = float(self.data[i + 2*len(self.data)/3])
+            z_color = math.RYGBMap((z - min_z)/(max_z - min_z))
+            color = (z_color[0]/255, z_color[1]/255, z_color[2]/255)
+            # TODO: make this a real heat map (via scatter plot).
+            line = matplotlib.lines.Line2D((x, x), (y, y), ls='None',
+              color=color, marker='o', ms=2*int(style['dots-radius']),
+              mfc=color, mew=0)
+            canvas.axes.add_line(line)
+        canvas.Draw()
+
     def PrintResult(self, text):
         pass
 
@@ -133,27 +134,29 @@ class LinearRegression:
         return True
 
     def DoDrawing(self, canvas, style):
-        canvas.DrawGrid()
-        width = canvas.size[0] - 2*canvas.margin[0]
-        height = canvas.size[1] - 2*canvas.margin[1]
+        canvas.Clear()
         (min_x, max_x, min_y, max_y) = math.RangeN(self.data)
-        canvas.SetDrawingArea(min_x, max_x, min_y, max_y)
-        canvas.SetStyle(style)
         x_0 = min_x
         y_0 = self.res['slope']*x_0 + self.res['intercept']
         x_1 = max_x
         y_1 = self.res['slope']*x_1 + self.res['intercept']
-        canvas.DrawLine(
-            int(2*canvas.margin[0] + (float(x_0) - min_x)*
-                (width - 2*canvas.margin[0])/(max_x - min_x)),
-            int(height - ((float(y_0) - min_y)*
-                (height - 2*canvas.margin[1])/(max_y - min_y))),
-            int(2*canvas.margin[0] + (float(x_1) - min_x)*
-                (width - 2*canvas.margin[0])/(max_x - min_x)),
-            int(height - ((float(y_1) - min_y)*
-                (height - 2*canvas.margin[1])/(max_y - min_y))),
-            color = style['line-color'], width = style['line-width'])
-        canvas.PlotXYData(self.data)
+        canvas.Clear()
+        canvas.axes = canvas.fig.add_subplot(111,
+          xlim=(min_x, max_x), ylim=(min_y, max_y))
+        line = matplotlib.lines.Line2D((x_0, x_1), (y_0, y_1),
+          lw=int(style['line-width']), ls='-',
+          color=style['line-color'].GetAsString(wx.C2S_HTML_SYNTAX))
+        canvas.axes.add_line(line)
+        n = self.size/2
+        indexes = numpy.array(self.data[:n], dtype = float)
+        data = numpy.array(self.data[n:], dtype = float)
+        line = matplotlib.lines.Line2D(indexes, data, ls='None',
+          color=style['line-color'].GetAsString(wx.C2S_HTML_SYNTAX),
+          marker='o', ms=2*int(style['dots-radius']),
+          mfc=style['dots-color'].GetAsString(wx.C2S_HTML_SYNTAX),
+          mew=0)
+        canvas.axes.add_line(line)
+        canvas.Draw()
 
     def PrintResult(self, text):
         summary = "Y = {0:.2}*X + {1:.2}\n".format(self.res['slope'],

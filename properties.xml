@@ -1,15 +1,15 @@
 <properties>
 <component id="main-window">
-<x-size>508</x-size>
-<y-size>467</y-size>
+<x-size>542</x-size>
+<y-size>483</y-size>
 <x-position>0</x-position>
 <y-position>39</y-position>
 </component>
 <component id="results">
-<x-size>541</x-size>
-<y-size>651</y-size>
-<x-position>478</x-position>
-<y-position>9</y-position>
+<x-size>455</x-size>
+<y-size>555</y-size>
+<x-position>522</x-position>
+<y-position>17</y-position>
 <text-encoding>41</text-encoding>
 <text-face>Sans</text-face>
 <text-family>74</text-family>
@@ -26,13 +26,13 @@
 <graph-weight>90</graph-weight>
 </component>
 <component id="style">
-<dots-color-r>139</dots-color-r>
-<dots-color-g>205</dots-color-g>
-<dots-color-b>42</dots-color-b>
-<dots-radius>2</dots-radius>
-<line-color-r>253</line-color-r>
-<line-color-g>41</line-color-g>
-<line-color-b>109</line-color-b>
-<line-width>3</line-width>
+<dots-color-r>129</dots-color-r>
+<dots-color-g>181</dots-color-g>
+<dots-color-b>220</dots-color-b>
+<dots-radius>3</dots-radius>
+<line-color-r>234</line-color-r>
+<line-color-g>147</line-color-g>
+<line-color-b>180</line-color-b>
+<line-width>2</line-width>
 </component>
 </properties>

@@ -18,7 +18,7 @@ class ResultGraph (wx.ScrolledWindow):
         self.Bind(wx.EVT_WINDOW_CREATE, self.__post_init)
 
     def __post_init(self, event):
-        self.SetScrollbars(5, 5, 90, 90)        
+        self.SetScrollbars(5, 5, 90, 90)
         self.canvas = FigureCanvas(self, id=wx.ID_ANY, figure=self.fig)
         self.Unbind(wx.EVT_WINDOW_CREATE)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
@@ -27,7 +27,10 @@ class ResultGraph (wx.ScrolledWindow):
         self.fig.clf()
 
     def Draw(self):
-        self.canvas.draw()
+        try:
+            self.canvas.draw()
+        except AttributeError: # if canvas still doesn't exist
+            pass
 
     def OnPaint(self, event):
         self.canvas.draw()

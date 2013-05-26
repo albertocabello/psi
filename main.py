@@ -69,7 +69,7 @@ class PSI(wx.App):
         self.props[(u'main-window', u'x-size')] = w
         self.props[(u'main-window', u'y-size')] = h
         self.props.Save()
-        self.results.Close(False)
+        self.result.Close(False)
         self.frame.Close(False)
 
     def OpenFile(self, e):
