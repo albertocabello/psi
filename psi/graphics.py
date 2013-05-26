@@ -3,6 +3,25 @@
 
 import wx
 
+"""
+class Graph:
+
+    def __init__(self):
+        self.objects = []
+
+    def Clean(self):
+        self.objects = []
+
+    def Circle(self, cx=0, cy=0, r=1):
+        self.objects.append({'shape': 'circle', ))
+
+    def Line(self):
+    def Line(self):
+    def Line(self):
+    def Point(self):
+    def Rectangle(self):
+    def Text(self):"""
+
 
 class ResultGraph(wx.ScrolledWindow):
 
@@ -13,17 +32,25 @@ class ResultGraph(wx.ScrolledWindow):
         self.margin = (10, 10)
         self.size = (450, 450)
         self.PostCreate(pre)
-        self.Bind(wx.EVT_PAINT, self.PostInit)
+        self.Bind(wx.EVT_PAINT, self.__post_init)
 
-    def PostInit(self, event):
+    def __on_paint(self, event):
+        dc = self.Init()
+        self.Show()
+
+    def __post_init(self, event):
         self.pos = (0, 0)
         self.size = (450, 450)
         self.SetScrollbars(5, 5, 90, 90)
-        self.OnPaint(event)
+        self.__on_paint(event)
         self.Unbind(wx.EVT_PAINT)
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_PAINT, self.__on_paint)
 
     def Init(self):
+        """
+        Returns a PaintDC, creating a Bitmap for it when needed.
+        Make drawing operations on the return value of Init().
+        """
         try:
             dc = wx.BufferedPaintDC(self, self.buffer, wx.BUFFER_VIRTUAL_AREA)
         except AttributeError:
@@ -34,10 +61,6 @@ class ResultGraph(wx.ScrolledWindow):
             dc.SetPen(wx.Pen('black', 2))
         return dc
 
-    def OnPaint(self, event):
-        dc = self.Init()
-        self.Show()
-
     def DrawCircle(self, x, y, color=None, radius=None):
         dc = self.Init()
         if color is None:
@@ -47,6 +70,7 @@ class ResultGraph(wx.ScrolledWindow):
         dc.SetPen(wx.Pen(color, 1))
         dc.SetBrush(wx.Brush(color))
         dc.DrawCircle(x, y, radius)
+        print x, y
 
     def DrawGrid(self, color='black', width=1, x_ticks=10, y_ticks=10):
         dc = self.Init()

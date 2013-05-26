@@ -1,9 +1,9 @@
 <properties>
 <component id="main-window">
-<x-size>456</x-size>
-<y-size>475</y-size>
-<x-position>8</x-position>
-<y-position>51</y-position>
+<x-size>508</x-size>
+<y-size>467</y-size>
+<x-position>0</x-position>
+<y-position>39</y-position>
 </component>
 <component id="results">
 <x-size>541</x-size>

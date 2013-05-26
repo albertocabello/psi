@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import wx.grid
-import graphics
+import gml
 
 
 def ctrl(window, str_id):
@@ -18,6 +18,12 @@ class DataGrid (wx.grid.Grid):
     def OnCreate(self, evt):
         self.Unbind(wx.EVT_WINDOW_CREATE)
         self.SetDefaultCellAlignment(wx.ALIGN_RIGHT, wx.ALIGN_BOTTOM)
+        sample_data = ((1, 2, 3, 4),
+                       (5, 4.3, 7.6, 8.1),
+                       (4.3, 1.2, 6.2, 4.1))
+        for i in range(0, 3):
+            for j in range(0, 4):
+                self.SetCellValue(j, i, '{0}'.format(sample_data[i][j]))
 
     def LoadCSV(self, filename, separator = ','):
         """
@@ -131,7 +137,7 @@ class Result (wx.Frame):
         font.SetStyle(int(props[(u'results', u'graph-style')]))
         font.SetUnderlined(bool(props[(u'results', u'graph-underlined')]))
         font.SetWeight(int(props[(u'results', u'graph-weight')]))
-        self.graph.SetStyle(graphics.Style(props))
+        self.graph.SetStyle(gml.Style(props))
         self.graph.SetFont(font)
         ctrl(self, u'ButtonOK').Bind(wx.EVT_LEFT_UP, self.Close)
 
@@ -143,7 +149,7 @@ class Result (wx.Frame):
         self.props[(u'results', u'x-size')] = w
         self.props[(u'results', u'y-size')] = h
         self.props.Save()
-        wx.Frame.Close(self, False)
+        self.Hide()
 
 
 class StyleDialog(wx.Dialog):

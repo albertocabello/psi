@@ -3,7 +3,7 @@
 
 import wx.xrc
 from psi import analysis
-from psi import graphics
+from psi import gml
 import psi.properties_manager as pm
 from psi import ui
 
@@ -69,11 +69,7 @@ class PSI(wx.App):
         self.props[(u'main-window', u'x-size')] = w
         self.props[(u'main-window', u'y-size')] = h
         self.props.Save()
-        try:
-            self.results.Close(False)
-        except:
-            # Results window could have been closed before
-            pass
+        self.results.Close(False)
         self.frame.Close(False)
 
     def OpenFile(self, e):
@@ -99,7 +95,7 @@ class PSI(wx.App):
                 self.result.text.Clear()
                 analyst.PrintResult(self.result.text)
                 analyst.DoDrawing(self.result.graph,
-                                    graphics.Style(self.props))
+                                    gml.Style(self.props))
 
     def BasicStatistics(self, e):
         analyst = analysis.BasicStatistics()
@@ -108,7 +104,7 @@ class PSI(wx.App):
                 self.result.text.Clear()
                 analyst.PrintResult(self.result.text)
                 analyst.DoDrawing(self.result.graph,
-                                    graphics.Style(self.props))
+                                    gml.Style(self.props))
 
     def HeatMap(self, e):
         analyst = analysis.HeatMap()
@@ -117,7 +113,7 @@ class PSI(wx.App):
                 self.result.text.Clear()
                 analyst.PrintResult(self.result.text)
                 analyst.DoDrawing(self.result.graph,
-                                    graphics.Style(self.props))
+                                    gml.Style(self.props))
 
 if __name__ == '__main__':
     app = PSI(False)

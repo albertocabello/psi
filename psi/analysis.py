@@ -3,6 +3,7 @@
 
 import numpy
 import math
+import matplotlib
 import scipy.stats
 import wx
 
@@ -39,15 +40,20 @@ class BasicStatistics:
         text.AppendText(u"Variance: {0}\n".format(self.res['var']))
 
     def DoDrawing(self, canvas, style):
-        canvas.DrawGrid(x_ticks=0)
         data = numpy.sort(numpy.array(self.data, dtype=float))
-        canvas.SetDrawingArea(0, len(data), min(data), max(data))
-        width = canvas.size[0] - 2*canvas.margin[0]
-        height = canvas.size[1] - 2*canvas.margin[1]
-        canvas.SetStyle(style)
-        for i in range(0, len(data)):
-            canvas.PlotXY((i, data[i]))
-
+        canvas.Clear()
+        canvas.axes = canvas.fig.add_subplot(111,
+          xlim=(1, len(self.data)), ylim=(self.res['min'], self.res['max']))
+        line = matplotlib.lines.Line2D(
+          range(1, len(self.data) + 1), data, 2, '-', 'red')
+        canvas.axes.add_line(line)
+        canvas.Draw()
+        # canvas.SetDrawingArea(0, len(data), min(data), max(data))
+        # width = canvas.size[0] - 2*canvas.margin[0]
+        # height = canvas.size[1] - 2*canvas.margin[1]
+        # canvas.SetStyle(style)
+        # for i in range(0, len(data)):
+        #     canvas.PlotXY((i, data[i]))
 
 class HeatMap:
 
@@ -87,21 +93,16 @@ class HeatMap:
         (min_z, max_z) = (self.z_range[0], self.z_range[1])
         canvas.SetDrawingArea(min_x, max_x, min_y, max_y)
         canvas.SetStyle(style)
-        dc = canvas.Init()
+        radius =int(style['dots-radius'])
         for i in range(0, len(self.data)/3):
+            z = float(self.data[i + 2*len(self.data)/3])
             x = float(self.data[i])
             y = float(self.data[i + len(self.data)/3])
-            x = int(2*canvas.margin[0] + (x - min_x)*
-                    (width - 2*canvas.margin[0])/(max_x - min_x))
-            y = int(2*canvas.margin[1] + (y - max_y)*
-                    (height - 2*canvas.margin[1])/(min_y - max_y))
-            z = float(self.data[i + 2*len(self.data)/3])
             mapped_color = math.RYGBMap((z - min_z)/(max_z - min_z))
             color = wx.Color(mapped_color[0], mapped_color[1], mapped_color[2])
-            dc.SetPen(wx.Pen(color, 1))
-            dc.SetBrush(wx.Brush(color))
-            dc.DrawCircle(x, y, int(style['dots-radius']))
-
+            canvas.PlotXY((x, y), color=color, radius=radius)
+        # canvas.Plot()
+        #
     def PrintResult(self, text):
         pass
 
